@@ -64,9 +64,10 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'config.urls'
 CORS_ALLOW_ALL_ORIGINS = True
-CORS_ORIGIN_WHITELIST = [
-    "http://localhost:3000",  # Masalan, React frontend uchun
+CORS_ALLOWED_ORIGINS  = [
     "https://light-calc-rust.vercel.app",
+    "http://localhost:3000",  # Masalan, React frontend uchun
+    
     "https://cal.mkinfo.uz",
 ]
 
