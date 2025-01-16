@@ -37,7 +37,7 @@ class LampCalculationAPIView(APIView):
 
     def post(self, request, *args, **kwargs):
         try:
-            # Kutilgan ma'lumotlarni olish (foydalanuvchidan kelgan malumotlar)
+            # Kutilgan ma'lumotlarni olish (foydalanuvchidan kelgan ma'lumotlar)
             data = request.data
             room_length = float(data.get('room_length', 0))  # Xona uzunligi (metr)
             room_width = float(data.get('room_width', 0))    # Xona kengligi (metr)
@@ -75,7 +75,6 @@ class LampCalculationAPIView(APIView):
             # Lampalar sonini hisoblash
             required_lamps_count = (effective_illumination * total_area) / (lamp_flux * utilization_factor * maintenance_factor)
             required_lamps_count = max(1, round(required_lamps_count))  # Kamida 1 lampochka kerak
-            print(required_lamps_count)
 
             # Asl lampaning umumiy quvvati va yorug'lik
             total_watt_user_lamp = lamp_watt * required_lamps_count
@@ -93,7 +92,7 @@ class LampCalculationAPIView(APIView):
                 # Lampaning umumiy quvvati va yorug'lik
                 total_watt = lamp['watt'] * lamp_count
                 total_lumen = lamp['lumen'] * lamp_count
-                
+
                 # Eng kam energiya sarflaydigan lampochkani tanlash
                 if total_watt < min_total_watt:
                     min_total_watt = total_watt
@@ -109,23 +108,28 @@ class LampCalculationAPIView(APIView):
             total_cost = (total_watt_user_lamp * working_hours_per_day) / 1000 * cost_per_kwh
             energy_saved_cost = (energy_saved * working_hours_per_day) / 1000 * cost_per_kwh
 
-            return Response({
-                "status": "success",
-                "jami_lampochka": required_lamps_count,
-                "bir_kunda_tok_ishlatadi": total_watt_user_lamp * working_hours_per_day,  # Kuni davomida ishlatilgan tok
-                "bir_kunda_som": total_cost,  # Kuni davomida to'lanadigan qiymat
+            response_data = {
+                "room_length": room_length,
+                "room_width": room_width,
+                "room_height": room_height,
+                "reflection_factors": reflection_factors,
+                "illumination": illumination,
+                "working_surface_height": 0,
+                "reserve_factor": reserve_factor,
                 "tavsiya_qilinadi": {
                     "lamp": best_choice["name"],
                     "watt": best_choice["watt"],
                     "lumen": best_choice["lumen"],
                     "diameter": best_choice["diameter"],
                     "weight": best_choice["weight"],
-                    "tok_teyadi": energy_saved,  # Tejash mumkin bo'lgan energiya
-                    "foyda_som": energy_saved_cost,  # Tejash mumkin bo'lgan pul miqdori
-                    "yoruglik": best_choice["lumen"] * best_lamps_count,  # Yangi lampochkalar bilan olingan yorug'lik
-                    "number_of_lamps": best_lamps_count  # Nechta lampa kerak
+                    "tok_teyadi": round(energy_saved, 2),
+                    "foyda_som": round(energy_saved_cost, 2),
+                    "yoruglik": best_choice["lumen"] * best_lamps_count,
+                    "number_of_lamps": best_lamps_count
                 }
-            }, status=status.HTTP_200_OK)
+            }
+
+            return Response(response_data, status=status.HTTP_200_OK)
 
         except Exception as e:
             return Response({"status": "error", "message": str(e)}, status=status.HTTP_400_BAD_REQUEST)
