@@ -63,7 +63,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'config.urls'
-
+CORS_ALLOW_ALL_ORIGINS = True
 CORS_ORIGIN_WHITELIST = [
     "http://localhost:3000",  # Masalan, React frontend uchun
     "https://light-calc-rust.vercel.app",
@@ -72,20 +72,17 @@ CORS_ORIGIN_WHITELIST = [
 
 
 
-CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOW_ALL_ORIGINS = True
 
 CSRF_TRUSTED_ORIGINS = [
     'https://cal.mkinfo.uz',
 ]
 REST_FRAMEWORK = {
-    # 'DEFAULT_PERMISSION_CLASSES': [
-    #     'rest_framework.permissions.IsAuthenticated',  # Barcha API'lar uchun autentifikatsiya kerak
-    # ],
-    # 'DEFAULT_AUTHENTICATION_CLASSES': [
-    #     'rest_framework.authentication.SessionAuthentication',  # Sessiya asosida autentifikatsiya
-    #     'rest_framework.authentication.BasicAuthentication',   # Basic autentifikatsiya
-    # ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',  # Barcha API'lar uchun autentifikatsiya kerak
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [ # Sessiya asosida autentifikatsiya
+        'rest_framework.authentication.BasicAuthentication',   # Basic autentifikatsiya
+    ],
 }
 
 
