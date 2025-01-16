@@ -51,9 +51,10 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
+    
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -62,14 +63,21 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'config.urls'
-CORS_ALLOWED_ORIGINS = [
+
+CORS_ORIGIN_WHITELIST = [
     "http://localhost:3000",  # Masalan, React frontend uchun
     "https://light-calc-rust.vercel.app",
     "https://cal.mkinfo.uz",
-        # O'zingizning domeningiz
 ]
+
+
+
 CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOW_ALL_ORIGINS = False
+CORS_ALLOW_ALL_ORIGINS = True
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://cal.mkinfo.uz',
+]
 REST_FRAMEWORK = {
     # 'DEFAULT_PERMISSION_CLASSES': [
     #     'rest_framework.permissions.IsAuthenticated',  # Barcha API'lar uchun autentifikatsiya kerak
@@ -98,9 +106,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'config.wsgi.application'
-CSRF_TRUSTED_ORIGINS = [
-    'https://cal.mkinfo.uz',
-]
+
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
