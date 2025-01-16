@@ -68,7 +68,8 @@ CORS_ALLOWED_ORIGINS = [
     "https://cal.mkinfo.uz",
         # O'zingizning domeningiz
 ]
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_ALL_ORIGINS = False
 REST_FRAMEWORK = {
     # 'DEFAULT_PERMISSION_CLASSES': [
     #     'rest_framework.permissions.IsAuthenticated',  # Barcha API'lar uchun autentifikatsiya kerak
