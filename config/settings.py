@@ -64,14 +64,13 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'config.urls'
 CORS_ALLOW_ALL_ORIGINS = True
-CORS_ALLOWED_ORIGINS  = [
+# yoki agar maxsus domenlar bilan cheklamoqchi bo'lsangiz
+CORS_ALLOW_ALL_ORIGINS = False
+CORS_ORIGIN_WHITELIST = [
     "https://light-calc-rust.vercel.app",
-    "http://localhost:3000",  # Masalan, React frontend uchun
-    
+    "http://localhost:3000",
     "https://cal.mkinfo.uz",
 ]
-
-
 
 
 CSRF_TRUSTED_ORIGINS = [
