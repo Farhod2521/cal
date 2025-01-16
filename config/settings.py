@@ -64,7 +64,8 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'config.urls'
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",  # Masalan, React frontend uchun
-    "https://light-calc-rust.vercel.app", 
+    "https://light-calc-rust.vercel.app",
+    "https://cal.mkinfo.uz",
         # O'zingizning domeningiz
 ]
 
