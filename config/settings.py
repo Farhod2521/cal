@@ -75,7 +75,8 @@ CORS_ALLOWED_ORIGINS  = [
 
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://cal.mkinfo.uz',
+    "https://light-calc-rust.vercel.app",
+    "https://cal.mkinfo.uz",
 ]
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
