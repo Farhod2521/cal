@@ -15,6 +15,9 @@ class  Type_of_premises(models.Model):
 class Room_Type_Category(models.Model):
     name  =  models.CharField(max_length=500)
 
+    def __str__(self):
+        return self.name 
+
 
 class Room_Type(models.Model):
     category = models.ForeignKey(Room_Type_Category, on_delete=models.PROTECT)
