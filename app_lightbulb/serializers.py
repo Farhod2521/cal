@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Type_of_premises
+from .models import Type_of_premises, Room_Type_Category, Room_Type
 
 
 class Type_of_premises_Serializers(serializers.ModelSerializer):
@@ -9,6 +9,19 @@ class Type_of_premises_Serializers(serializers.ModelSerializer):
         fields = "__all__"
 
 
+
+
+class RoomTypeCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Room_Type_Category
+        fields = '__all__'
+
+class RoomTypeSerializer(serializers.ModelSerializer):
+    category_name = serializers.CharField(source='category.name', read_only=True)
+
+    class Meta:
+        model = Room_Type
+        fields = '__all__'
 
 
 class CalculateLampsSerializer(serializers.Serializer):

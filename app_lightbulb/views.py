@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from  rest_framework.generics import ListAPIView
-from .serializers import Type_of_premises_Serializers
-from .models import Type_of_premises
-from .serializers import CalculateLampsSerializer
+from .serializers import Type_of_premises_Serializers, RoomTypeCategorySerializer, RoomTypeSerializer
+from .models import Type_of_premises, Room_Type_Category, Room_Type
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -18,7 +18,17 @@ class Type_of_premises_ListApiview(ListAPIView):
 
 
 
+class RoomTypeCategoryListView(ListAPIView):
+    queryset = Room_Type_Category.objects.all()
+    serializer_class = RoomTypeCategorySerializer
 
+
+class RoomTypeListView(ListAPIView):
+    serializer_class = RoomTypeSerializer
+
+    def get_queryset(self):
+        category_id = self.kwargs.get('category_id')
+        return Room_Type.objects.filter(category_id=category_id)
 
 
 
