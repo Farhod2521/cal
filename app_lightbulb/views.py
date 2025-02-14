@@ -19,10 +19,24 @@ class Type_of_premises_ListApiview(ListAPIView):
 
 
 class RoomTypeCategoryListView(ListAPIView):
-    queryset = Room_Type_Category.objects.all()
     serializer_class = RoomTypeCategorySerializer
 
+    def get_queryset(self):
+        # Faqat parent=None bo'lganlar
+        return Room_Type_Category.objects.filter(parent__isnull=True)
 
+# View to list categories by parent ID
+class RoomTypeCategoryByParentView(ListAPIView):
+    serializer_class = RoomTypeCategorySerializer
+
+    def get_queryset(self):
+        # URL orqali uzatilgan parent_id ni olish
+        parent_id = self.kwargs.get('parent_id')
+        if parent_id is not None:
+            return Room_Type_Category.objects.filter(parent_id=parent_id)
+        return Room_Type_Category.objects.none()  # Agar parent_id bo'lmasa bo'sh queryset
+
+# View to list Room Types by category ID
 class RoomTypeListView(ListAPIView):
     serializer_class = RoomTypeSerializer
 
