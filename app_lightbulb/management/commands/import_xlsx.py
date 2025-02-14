@@ -17,41 +17,29 @@ class Command(BaseCommand):
         
         # Iterate through each row in the Excel file
         for index, row in data.iterrows():
-            # Print row for debugging purposes
-            print(f"Processing row {index + 1}: {row.to_dict()}")
-            
             # Handle Room_Type_Category (parent)
-            root_category_name = row['Room_Type_Category  name'].strip()  
+            root_category_name = str(row['Room_Type_Category  name']).strip()  
             root_category, _ = Room_Type_Category.objects.get_or_create(name=root_category_name, parent=None)
             
             # Handle category (child of the root category)
-            category_name = row['category'].strip() if pd.notna(row['category']) else None
+            category_name = str(row['category']).strip() if pd.notna(row['category']) else None
             if category_name:
                 category, _ = Room_Type_Category.objects.get_or_create(name=category_name, parent=root_category)
             else:
                 category = root_category
 
-            # Additional conditions for fields
+            # Ensure all fields are handled safely
+            def safe_str(value):
+                return str(value).strip() if pd.notna(value) else ""
+
             table_height = (
                 float(row["table_height"]) 
                 if pd.notna(row["table_height"]) and str(row["table_height"]).strip() != "-" 
                 else 0
             )
-            color_tem = (
-                row["color_tem"].strip() 
-                if pd.notna(row["color_tem"]) and str(row["color_tem"]).strip() != "-" 
-                else ""
-            )
-            light_type = (
-                row["light_type"].strip() 
-                if pd.notna(row["light_type"]) and str(row["light_type"]).strip() != "-" 
-                else ""
-            )
-            recommended_lamps = (
-                row["recommended_lamps"].strip() 
-                if pd.notna(row["recommended_lamps"]) 
-                else ""
-            )
+            color_tem = safe_str(row["color_tem"])
+            light_type = safe_str(row["light_type"])
+            recommended_lamps = safe_str(row["recommended_lamps"])
 
             # Create Room_Type instance
             try:
