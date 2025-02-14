@@ -1,6 +1,6 @@
 import pandas as pd
 from django.core.management.base import BaseCommand
-from cal.app_lightbulb.models import Room_Type_Category, Room_Type
+from app_lightbulb.models import Room_Type_Category, Room_Type
 
 class Command(BaseCommand):
     help = 'Import room types and categories from an Excel file'
