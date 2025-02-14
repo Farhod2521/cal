@@ -1,6 +1,6 @@
 import pandas as pd
 from django.core.management.base import BaseCommand
-from app_lightbulb.models import Room_Type_Category, Room_Type
+from cal.app_lightbulb.models import Room_Type_Category, Room_Type
 
 class Command(BaseCommand):
     help = 'Import room types and categories from an Excel file'
@@ -11,11 +11,14 @@ class Command(BaseCommand):
         
         # Read the Excel file
         data = pd.read_excel(file_path)
+
+        # Strip all column names to remove any extra spaces
+        data.columns = data.columns.str.strip()
         
         # Iterate through each row in the Excel file
         for index, row in data.iterrows():
             # Handle Room_Type_Category (parent)
-            root_category_name = row['Room_Type_Category name'].strip()
+            root_category_name = row['Room_Type_Category  name'].strip()  # Ensure correct column name
             root_category, _ = Room_Type_Category.objects.get_or_create(name=root_category_name, parent=None)
             
             # Handle category (child of the root category)
