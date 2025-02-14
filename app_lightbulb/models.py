@@ -13,18 +13,12 @@ class  Type_of_premises(models.Model):
 
 
 
-class Room_Type_Category(models.Model):
-    name = models.CharField(max_length=500, unique=True)
-    parent = TreeForeignKey(
-        "self", 
-        on_delete=models.CASCADE, 
-        null=True, 
-        blank=True, 
-        related_name="children"
-    )
+class Room_Type_Category(MPTTModel):  # MPTTModel dan meros olish
+    name = models.CharField(max_length=500)
+    parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
 
     class MPTTMeta:
-        order_insertion_by = ["name"]
+        order_insertion_by = ['name']  # Kategoriyalar alfavit bo‘yicha tartiblanadi
 
     def __str__(self):
         return self.name
