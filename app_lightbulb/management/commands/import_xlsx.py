@@ -10,22 +10,23 @@ class Command(BaseCommand):
         file_path = "/home/user/backend/cal/app_lightbulb/management/commands/x.xlsx"
 
         df = pd.read_excel(file_path, engine="openpyxl")
-        df.columns = df.columns.str.strip()  # Ustun nomlaridan bo‘sh joylarni olib tashlash
+        df.columns = df.columns.str.replace(r"\s+", " ", regex=True).str.strip()  # Ortiqcha bo‘sh joylarni tozalash
 
-        category_col = "category"
-        subcategory_col = "Subcategory"
-        room_col = "Room_Type_Category name"
+        print("Excel faylidagi ustunlar:", df.columns)  # Ustunlarni tekshirish
 
-        if category_col not in df.columns or room_col not in df.columns:
-            raise ValueError("Excel faylida kerakli ustunlar topilmadi!")
+        category_col = next((col for col in df.columns if "category" in col.lower()), None)
+        room_col = next((col for col in df.columns if "room_type_category" in col.lower()), None)
+
+        if not category_col or not room_col:
+            raise ValueError(f"Excel faylida kerakli ustunlar topilmadi! Ustunlar: {df.columns}")
 
         for index, row in df.iterrows():
             main_category_name = str(row.get(room_col, "")).strip()
             subcategory_name = str(row.get(category_col, "")).strip() if pd.notna(row.get(category_col)) else ""
-            room_name = str(row.get(subcategory_col, "")).strip() if pd.notna(row.get(subcategory_col)) else ""
+            room_name = str(row.get("Subcategory", "")).strip() if pd.notna(row.get("Subcategory")) else ""
 
             if not main_category_name:
-                continue  # Agar asosiy kategoriya bo'lmasa, bu qatordan o'tib ketamiz
+                continue  # Asosiy kategoriya bo'lmasa, o'tkazib yuboramiz
 
             # Asosiy kategoriyani yoki mavjudini olish
             main_category, _ = Room_Type_Category.objects.get_or_create(name=main_category_name, parent=None)
@@ -38,10 +39,9 @@ class Command(BaseCommand):
             if not room_name:
                 continue  # Agar xona nomi bo‘lmasa, bu qatordan o‘tib ketamiz
 
-            # Faqat raqamlarni olish uchun yordamchi funksiya
             def clean_number(value, default=0):
                 if pd.notna(value):
-                    num = re.sub(r"\D", "", str(value))  # Raqam bo'lmaganlarni olib tashlash
+                    num = re.sub(r"\D", "", str(value))  # Faqat raqamlarni olish
                     return int(num) if num else default
                 return default
 
