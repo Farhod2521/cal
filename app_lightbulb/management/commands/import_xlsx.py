@@ -16,18 +16,20 @@ class Command(BaseCommand):
         room_col = next((col for col in df.columns if "Room_Type" in col), None)
 
         if not category_col or not room_col:
-            raise ValueError("Room_Type_Category name yoki Room_Type name ustuni topilmadi! Excel ustunlarini tekshiring.")
+            raise ValueError("Room_Type_Category yoki Room_Type ustuni topilmadi! Excel ustunlarini tekshiring.")
 
-        category = None
+        category = None  # Avvalgi category ni eslab qolish
+
         for index, row in df.iterrows():
             category_name = str(row.get(category_col, "")).strip() if pd.notna(row.get(category_col)) else ""
             room_name = str(row.get(room_col, "")).strip() if pd.notna(row.get(room_col)) else ""
 
-            if category_name:
+            if category_name:  
+                # Faqat yangi category bo‘lsa yaratish yoki olish
                 category, _ = Room_Type_Category.objects.get_or_create(name=category_name)
 
             if not room_name:
-                continue
+                continue  # Bo‘sh room_type o‘tkazib yuboriladi
 
             # Faqat raqamlarni olish uchun yordamchi funksiya
             def clean_number(value, default=0):
