@@ -17,8 +17,11 @@ class Command(BaseCommand):
         
         # Iterate through each row in the Excel file
         for index, row in data.iterrows():
+            # Print row for debugging purposes
+            print(f"Processing row {index + 1}: {row.to_dict()}")
+            
             # Handle Room_Type_Category (parent)
-            root_category_name = row['Room_Type_Category  name'].strip()  # Ensure correct column name
+            root_category_name = row['Room_Type_Category  name'].strip()  
             root_category, _ = Room_Type_Category.objects.get_or_create(name=root_category_name, parent=None)
             
             # Handle category (child of the root category)
@@ -28,7 +31,7 @@ class Command(BaseCommand):
             else:
                 category = root_category
 
-            # Additional conditions for table_height, color_tem, light_type, and recommended_lamps
+            # Additional conditions for fields
             table_height = (
                 float(row["table_height"]) 
                 if pd.notna(row["table_height"]) and str(row["table_height"]).strip() != "-" 
@@ -51,15 +54,18 @@ class Command(BaseCommand):
             )
 
             # Create Room_Type instance
-            Room_Type.objects.create(
-                category=category,
-                lk=int(row['lk']),
-                ra=int(row['ra']),
-                k=int(row['k']) if pd.notna(row['k']) else None,
-                table_height=table_height,
-                color_tem=color_tem,
-                light_type=light_type,
-                recommended_lamps=recommended_lamps
-            )
+            try:
+                Room_Type.objects.create(
+                    category=category,
+                    lk=int(row['lk']),
+                    ra=int(row['ra']),
+                    k=int(row['k']) if pd.notna(row['k']) else None,
+                    table_height=table_height,
+                    color_tem=color_tem,
+                    light_type=light_type,
+                    recommended_lamps=recommended_lamps
+                )
+            except Exception as e:
+                print(f"Error processing row {index + 1}: {e}")
         
         self.stdout.write(self.style.SUCCESS('Data imported successfully'))
