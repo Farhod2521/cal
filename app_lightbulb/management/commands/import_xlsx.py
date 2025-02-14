@@ -7,9 +7,8 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         # File path
-        file_path = "/home/user/backend/cal/app_lightbulb/management/commands/x.xlsx"
         #file_path = r"D:\FASTAPI\cal\app_lightbulb\management\commands\x.xlsx"
-
+        file_path = "/home/user/backend/cal/app_lightbulb/management/commands/x.xlsx"
         # Read the Excel file
         data = pd.read_excel(file_path)
 
@@ -18,14 +17,15 @@ class Command(BaseCommand):
 
         # Function to safely convert values to integers
         def safe_int(value):
-            """Convert value to integer, handling '-' and invalid formats."""
+            """Convert value to integer, handling '-' and invalid formats, including floats."""
             if pd.isna(value) or value == "-" or str(value).strip() == "":
                 return 0
             try:
-                # Remove any extra symbols like '*'
-                value = str(value).replace("*", "").strip()
+                # Convert to float first to handle values like '80.0', then cast to int
+                value = float(str(value).replace("*", "").strip())
                 return int(value)
             except ValueError:
+                print(f"Warning: Could not convert '{value}' to integer")
                 return 0
 
         # Function to safely handle string values
@@ -56,6 +56,10 @@ class Command(BaseCommand):
             color_tem = safe_str(row.get("color_tem"))
             light_type = safe_str(row.get("light_type"))
             recommended_lamps = safe_str(row.get("recommended_lamps"))
+
+            # Debugging: Print the row details
+            print(f"Processing row {index + 1}:")
+            print(f"lk={safe_int(row.get('lk'))}, ra={safe_int(row.get('ra'))}, k={safe_int(row.get('k'))}, table_height={table_height}")
 
             # Create Room_Type instance
             try:
