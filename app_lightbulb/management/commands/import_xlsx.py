@@ -20,8 +20,8 @@ class Command(BaseCommand):
 
         category = None
         for index, row in df.iterrows():
-            category_name = row.get(category_col, "").strip()
-            room_name = row.get(room_col, "").strip()
+            category_name = str(row.get(category_col, "")).strip() if pd.notna(row.get(category_col)) else ""
+            room_name = str(row.get(room_col, "")).strip() if pd.notna(row.get(room_col)) else ""
 
             if category_name:
                 category, _ = Room_Type_Category.objects.get_or_create(name=category_name)
