@@ -14,7 +14,7 @@ class  Type_of_premises(models.Model):
 
 
 class Room_Type_Category(MPTTModel):  # MPTTModel dan meros olish
-    name = models.CharField(max_length=500)
+    name = models.CharField(max_length=1000)
     parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
 
     class MPTTMeta:
@@ -26,7 +26,6 @@ class Room_Type_Category(MPTTModel):  # MPTTModel dan meros olish
 
 class Room_Type(models.Model):
     category = models.ForeignKey(Room_Type_Category, on_delete=models.PROTECT)
-    name  =  models.CharField(max_length=500)
     lk = models.IntegerField()
     ra =  models.IntegerField()
     k =  models.IntegerField(verbose_name="Pulsatsiya", null=True, blank=True)
