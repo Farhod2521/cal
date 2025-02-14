@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'rest_framework', 
     'drf_yasg', 
     'corsheaders',
-
+    'mptt',
 
     ################# APP #################################
     "app_lightbulb",
