@@ -26,6 +26,7 @@ class Room_Type_Category(MPTTModel):  # MPTTModel dan meros olish
 
 class Room_Type(models.Model):
     category = models.ForeignKey(Room_Type_Category, on_delete=models.PROTECT)
+    name = models.CharField(max_length=255, blank=True, null=True) 
     lk = models.IntegerField()
     ra =  models.IntegerField()
     k =  models.IntegerField(verbose_name="Pulsatsiya", null=True, blank=True)
