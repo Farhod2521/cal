@@ -1,4 +1,5 @@
 import pandas as pd
+import re
 from django.core.management.base import BaseCommand
 from app_lightbulb.models import Room_Type_Category, Room_Type
 
@@ -11,7 +12,6 @@ class Command(BaseCommand):
         df = pd.read_excel(file_path, engine="openpyxl")
         df.columns = df.columns.str.strip()  # Ustun nomlaridan bo‘sh joylarni olib tashlash
 
-        # Ustun nomlarini avtomatik aniqlash
         category_col = next((col for col in df.columns if "Category" in col), None)
         room_col = next((col for col in df.columns if "Room_Type" in col), None)
 
@@ -29,15 +29,20 @@ class Command(BaseCommand):
             if not room_name:
                 continue
 
-            # Bo'sh yoki "-" bo'lgan qiymatlar uchun default qiymat
-            lk = int(row["lk"]) if pd.notna(row["lk"]) and str(row["lk"]).strip() != "-" else 0
-            ra = int(row["ra"]) if pd.notna(row["ra"]) and str(row["ra"]).strip() != "-" else 0
-            k = int(row["k"]) if pd.notna(row["k"]) and str(row["k"]).strip() != "-" else 0
+            # Faqat raqamlarni olish uchun yordamchi funksiya
+            def clean_number(value, default=0):
+                if pd.notna(value):
+                    num = re.sub(r"\D", "", str(value))  # Raqam bo'lmaganlarni olib tashlash
+                    return int(num) if num else default
+                return default
+
+            lk = clean_number(row["lk"])
+            ra = clean_number(row["ra"])
+            k = clean_number(row["k"])
             table_height = float(row["table_height"]) if pd.notna(row["table_height"]) and str(row["table_height"]).strip() != "-" else 0
             color_tem = row["color_tem"] if pd.notna(row["color_tem"]) and str(row["color_tem"]).strip() != "-" else ""
             light_type = row["light_type"] if pd.notna(row["light_type"]) and str(row["light_type"]).strip() != "-" else ""
 
-            # Ma'lumotlarni saqlash
             Room_Type.objects.create(
                 category=category,
                 name=room_name,
