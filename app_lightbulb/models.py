@@ -18,7 +18,7 @@ class Room_Type_Category(MPTTModel):  # MPTTModel dan meros olish
     parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
 
     class MPTTMeta:
-        order_insertion_by = ['name']  # Kategoriyalar alfavit bo‘yicha tartiblanadi
+        order_by = ["id"] # Kategoriyalar alfavit bo‘yicha tartiblanadi
 
     def __str__(self):
         return self.name
