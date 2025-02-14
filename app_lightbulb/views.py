@@ -31,7 +31,7 @@ class RoomTypeCategoryByParentView(ListAPIView):
 
     def get_queryset(self):
         # URL orqali uzatilgan parent_id ni olish
-        parent_id = self.kwargs.get('parent_id')
+        parent_id = self.kwargs.get('tree_id')
         if parent_id is not None:
             return Room_Type_Category.objects.filter(parent_id=parent_id)
         return Room_Type_Category.objects.none()  # Agar parent_id bo'lmasa bo'sh queryset
