@@ -7,8 +7,8 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         # File path
-        #file_path = "/home/user/backend/cal/app_lightbulb/management/commands/x.xlsx"
-        file_path = r"D:\FASTAPI\cal\app_lightbulb\management\commands\x.xlsx"
+        file_path = "/home/user/backend/cal/app_lightbulb/management/commands/x.xlsx"
+        #file_path = r"D:\FASTAPI\cal\app_lightbulb\management\commands\x.xlsx"
 
         # Read the Excel file
         data = pd.read_excel(file_path)
