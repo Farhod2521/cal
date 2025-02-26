@@ -70,12 +70,16 @@ CORS_ORIGIN_WHITELIST = [
     "https://light-calc-rust.vercel.app",
     "http://localhost:3000",
     "https://cal.mkinfo.uz",
+    "http://127.0.0.1:5501",
+    "http://127.0.0.1:5500",
+
 ]
 
 
 CSRF_TRUSTED_ORIGINS = [
     "https://light-calc-rust.vercel.app",
     "https://cal.mkinfo.uz",
+    "http://127.0.0.1:8000",
 ]
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [

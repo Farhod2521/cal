@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Room Type Selection</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        h2, h3 {
+            text-align: center;
+            color: #333;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 10px;
+        }
+        select, input {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 10px;
+            width: 100%;
+            margin-top: 15px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        button:hover {
+            background: #218838;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Room Type Selection</h2>
+
+    <label for="categorySelect">Bo‘limni tanlang:</label>
+    <select id="categorySelect"></select>
+
+    <label for="subCategorySelect">Subkategoriya tanlang:</label>
+    <select id="subCategorySelect"></select>
+
+    <div id="miniCategoryContainer"></div>
+    <div id="microCategoryContainer"></div> 
+
+    <h3>Yangi Room Type qo‘shish</h3>
+    <form id="roomForm">
+        <label for="roomName">Nomi:</label>
+        <input type="text" id="roomName" required>
+
+        <label for="lk">LK:</label>
+        <input type="number" id="lk" required>
+
+        <label for="ra">RA:</label>
+        <input type="number" id="ra" required>
+
+        <label for="k">Pulsatsiya:</label>
+        <input type="number" id="k">
+
+        <label for="table_height">Ish stoli balandligi:</label>
+        <input type="number" id="table_height">
+
+        <label for="color_tem">Rang harorati:</label>
+        <input type="text" id="color_tem">
+
+        <label for="light_type">Yoritish turi:</label>
+        <input type="text" id="light_type">
+
+        <label for="recommended_lamps">Tavsiya etilgan lampalar:</label>
+        <input type="text" id="recommended_lamps">
+
+        <button type="submit">Qo‘shish</button>
+    </form>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const categorySelect = document.getElementById("categorySelect");
+        const subCategorySelect = document.getElementById("subCategorySelect");
+        const miniCategoryContainer = document.getElementById("miniCategoryContainer");
+        const microCategoryContainer = document.getElementById("microCategoryContainer");
+        const roomForm = document.getElementById("roomForm");
+
+        const apiBaseURL = "http://127.0.0.1:8000/api/v1/lightbulb/api/room-categories/";
+
+        async function fetchData(url) {
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error(`Xatolik: ${response.statusText}`);
+                return await response.json();
+            } catch (error) {
+                console.error("Ma'lumot yuklashda xatolik:", error);
+            }
+        }
+
+        async function loadDropdown(selectElement, url, defaultOption) {
+            const data = await fetchData(url);
+            if (data) {
+                selectElement.innerHTML = `<option value="">${defaultOption}</option>`;
+                data.forEach(item => {
+                    selectElement.innerHTML += `<option value="${item.id}">${item.name}</option>`;
+                });
+            }
+        }
+
+        function loadCategories() {
+            loadDropdown(categorySelect, apiBaseURL, "Bo‘limni tanlang");
+        }
+
+        async function loadSubcategories(categoryId) {
+            if (!categoryId) return;
+            const data = await fetchData(`${apiBaseURL}${categoryId}/`);
+            if (data) {
+                subCategorySelect.innerHTML = '<option value="">Subkategoriya tanlang</option>';
+                data.subcategories.forEach(sub => {
+                    subCategorySelect.innerHTML += `<option value="${sub.id}">${sub.name}</option>`;
+                });
+                miniCategoryContainer.innerHTML = "";
+                microCategoryContainer.innerHTML = "";
+            }
+        }
+
+        async function loadDynamicCategories(parentId, container, selectId, labelText) {
+            if (!parentId) return;
+            const data = await fetchData(`${apiBaseURL}${parentId}/`);
+            if (data && data.subcategories.length > 0) {
+                container.innerHTML = `
+                    <label for="${selectId}">${labelText}</label>
+                    <select id="${selectId}">
+                        <option value="">${labelText}</option>
+                        ${data.subcategories.map(sub => `<option value="${sub.id}">${sub.name}</option>`).join("")}
+                    </select>
+                `;
+            } else {
+                container.innerHTML = "";
+            }
+        }
+
+        categorySelect.addEventListener("change", e => loadSubcategories(e.target.value));
+        subCategorySelect.addEventListener("change", e => loadDynamicCategories(e.target.value, miniCategoryContainer, "miniCategorySelect", "Mini-kategoriya tanlang"));
+        miniCategoryContainer.addEventListener("change", e => {
+            if (e.target.id === "miniCategorySelect") {
+                loadDynamicCategories(e.target.value, microCategoryContainer, "microCategorySelect", "Mikro-kategoriya tanlang");
+            }
+        });
+
+        async function submitRoom(event) {
+            event.preventDefault();
+
+            const category = categorySelect.value || null;
+            const subCategory = subCategorySelect.value || null;
+            const miniCategory = document.getElementById("miniCategorySelect") ? document.getElementById("miniCategorySelect").value : null;
+            const microCategory = document.getElementById("microCategorySelect") ? document.getElementById("microCategorySelect").value : null;
+
+            const data = {
+                category: category,
+                sub_category: subCategory,
+                mini_category: miniCategory,
+                micro_category: microCategory,
+                name: document.getElementById("roomName").value,
+                lk: document.getElementById("lk").value,
+                ra: document.getElementById("ra").value,
+                k: document.getElementById("k").value,
+                table_height: document.getElementById("table_height").value,
+                color_tem: document.getElementById("color_tem").value,
+                light_type: document.getElementById("light_type").value,
+                recommended_lamps: document.getElementById("recommended_lamps").value
+            };
+
+            try {
+                const response = await fetch(apiBaseURL, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(data)
+                });
+
+                if (!response.ok) throw new Error("Ma'lumot yuborishda xatolik!");
+
+                alert("Room Type added!");
+                roomForm.reset();
+            } catch (error) {
+                console.error(error);
+                alert("Xatolik yuz berdi!");
+            }
+        }
+
+        roomForm.addEventListener("submit", submitRoom);
+        loadCategories();
+    });
+</script>
+
+</body>
+</html>

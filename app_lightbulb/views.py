@@ -43,9 +43,63 @@ class RoomTypeListView(ListAPIView):
     def get_queryset(self):
         category_id = self.kwargs.get('category_id')
         return Room_Type.objects.filter(category_id=category_id)
+    
 
 
 
+
+
+
+
+
+from django.shortcuts import get_object_or_404
+
+class RoomTypeCategoryAPIView(APIView):
+    def get(self, request, category_id=None):
+        """
+        Kategoriyalarni daraxt ko'rinishida chiqarish.
+        Agar category_id berilsa, shu kategoriya ichidagi subkategoriyalar, minikategoriyalar va mikrokategoriyalar ham qaytadi.
+        """
+        if category_id:
+            category = get_object_or_404(Room_Type_Category, id=category_id)
+            subcategories = category.children.all()
+
+            subcategory_data = []
+            for sub in subcategories:
+                mini_categories = sub.children.all()
+
+                mini_data = []
+                for mini in mini_categories:
+                    micro_categories = mini.children.all()
+                    mini_data.append({
+                        "id": mini.id,
+                        "name": mini.name,
+                        "microcategories": RoomTypeCategorySerializer(micro_categories, many=True).data
+                    })
+
+                subcategory_data.append({
+                    "id": sub.id,
+                    "name": sub.name,
+                    "minicategories": mini_data
+                })
+
+            rooms = Room_Type.objects.filter(category=category)
+            return Response({
+                "subcategories": subcategory_data,
+                "rooms": RoomTypeSerializer(rooms, many=True).data
+            }, status=status.HTTP_200_OK)
+        else:
+            categories = Room_Type_Category.objects.filter(parent__isnull=True)
+            return Response(RoomTypeCategorySerializer(categories, many=True).data, status=status.HTTP_200_OK)
+
+    def post(self, request):
+        serializer = RoomTypeSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            print(serializer.errors)  # Xatolikni tekshirish uchun
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 
