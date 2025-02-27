@@ -31,8 +31,8 @@ class Room_Type(models.Model):
     ra =  models.IntegerField()
     k =  models.IntegerField(verbose_name="Pulsatsiya", null=True, blank=True)
     table_height = models.FloatField(default=0.8, verbose_name="Ish stoli balandligi", null=True, blank=True)
-    color_tem = models.CharField(max_length=200, null=True, blank=True)
-    light_type   = models.CharField(max_length=200)
+    razreyd = models.CharField(max_length=200, null=True, blank=True)
+    ugr   = models.CharField(max_length=200)
     recommended_lamps = models.CharField(max_length=200)
 
 

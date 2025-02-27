@@ -80,11 +80,11 @@
         <label for="table_height">Ish stoli balandligi:</label>
         <input type="number" id="table_height">
 
-        <label for="color_tem">Rang harorati:</label>
-        <input type="text" id="color_tem">
+        <label for="razreyd">Rang harorati:</label>
+        <input type="text" id="razreyd">
 
-        <label for="light_type">Yoritish turi:</label>
-        <input type="text" id="light_type">
+        <label for="ugr">Yoritish turi:</label>
+        <input type="text" id="ugr">
 
         <label for="recommended_lamps">Tavsiya etilgan lampalar:</label>
         <input type="text" id="recommended_lamps">
@@ -101,7 +101,7 @@
         const microCategoryContainer = document.getElementById("microCategoryContainer");
         const roomForm = document.getElementById("roomForm");
 
-        const apiBaseURL = "http://127.0.0.1:8000/api/v1/lightbulb/api/room-categories/";
+        const apiBaseURL = "https://cal.mkinfo.uz/api/v1/lightbulb/api/room-categories/";
 
         async function fetchData(url) {
             try {
@@ -182,8 +182,8 @@
                 ra: document.getElementById("ra").value,
                 k: document.getElementById("k").value,
                 table_height: document.getElementById("table_height").value,
-                color_tem: document.getElementById("color_tem").value,
-                light_type: document.getElementById("light_type").value,
+                razreyd: document.getElementById("razreyd").value,
+                ugr: document.getElementById("ugr").value,
                 recommended_lamps: document.getElementById("recommended_lamps").value
             };
 

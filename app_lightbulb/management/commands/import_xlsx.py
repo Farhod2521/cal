@@ -53,8 +53,8 @@ class Command(BaseCommand):
                 float(row["table_height"]) if pd.notna(row["table_height"]) and str(row["table_height"]).strip() != "-"
                 else 0
             )
-            color_tem = safe_str(row.get("color_tem"))
-            light_type = safe_str(row.get("light_type"))
+            razreyd = safe_str(row.get("razreyd"))
+            ugr = safe_str(row.get("ugr"))
             recommended_lamps = safe_str(row.get("recommended_lamps"))
 
             # Debugging: Print the row details
@@ -69,8 +69,8 @@ class Command(BaseCommand):
                     ra=safe_int(row.get('ra')),
                     k=safe_int(row.get('k')),
                     table_height=table_height,
-                    color_tem=color_tem,
-                    light_type=light_type,
+                    razreyd=razreyd,
+                    ugr=ugr,
                     recommended_lamps=recommended_lamps
                 )
             except Exception as e:
