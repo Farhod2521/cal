@@ -7,7 +7,7 @@ admin.site.register(Room_Type_Category, MPTTModelAdmin)
 
 @admin.register(Room_Type)
 class RoomTypeAdmin(admin.ModelAdmin):
-    list_display = ['category', 'ugr']
+    list_display = ['id','category', 'ugr']
     list_filter = ['category']
 
 admin.site.register(Type_of_premises)
