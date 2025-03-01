@@ -5,6 +5,9 @@ from mptt.admin import MPTTModelAdmin
 @admin.register(Room_Type_Category)
 class Room_Type_CategoryAdmin(MPTTModelAdmin, admin.ModelAdmin):
     list_display = ['id', 'name']
+    search_fields = ['name']  # Name bo‘yicha qidirish
+    list_filter = ['name']  # Name bo‘yicha filtr qo‘shish
+
 
 @admin.register(Room_Type)
 class RoomTypeAdmin(admin.ModelAdmin):
