@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'drf_yasg', 
     'corsheaders',
     'mptt',
+    'import_export',
 
     ################# APP #################################
     "app_lightbulb",
