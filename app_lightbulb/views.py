@@ -157,11 +157,27 @@ class LampCalculationAPIView(APIView):
                 lamp_count = max(1, lamp_count)
                 total_watt = lamp['watt'] * lamp_count
 
-                if efficiency > max_efficiency or (efficiency == max_efficiency and total_watt < min_total_watt):
-                    max_efficiency = efficiency
-                    best_choice = lamp
-                    best_lamps_count = lamp_count
-                    min_total_watt = total_watt
+                if total_area < 10:  # Kichik xona
+                    if lamp['diameter'] < 600:
+                        if efficiency > max_efficiency or (efficiency == max_efficiency and total_watt < min_total_watt):
+                            max_efficiency = efficiency
+                            best_choice = lamp
+                            best_lamps_count = lamp_count
+                            min_total_watt = total_watt
+
+                elif room_height > 3.5: # Baland xona
+                     if lamp['lumen'] > 3000:
+                        if efficiency > max_efficiency or (efficiency == max_efficiency and total_watt < min_total_watt):
+                            max_efficiency = efficiency
+                            best_choice = lamp
+                            best_lamps_count = lamp_count
+                            min_total_watt = total_watt
+                else:
+                    if efficiency > max_efficiency or (efficiency == max_efficiency and total_watt < min_total_watt):
+                        max_efficiency = efficiency
+                        best_choice = lamp
+                        best_lamps_count = lamp_count
+                        min_total_watt = total_watt
 
             if best_choice:
                 why_reasons = [
