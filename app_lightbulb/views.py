@@ -108,32 +108,24 @@ class RoomTypeCategoryAPIView(APIView):
 
 
 
-
-
 class LampCalculationAPIView(APIView):
     parser_classes = [JSONParser]
 
     def post(self, request, *args, **kwargs):
         try:
-            # Kutilgan ma'lumotlarni olish (foydalanuvchidan kelgan ma'lumotlar)
+            # Foydalanuvchi ma'lumotlarini olish
             data = request.data
             room_length = float(data.get('room_length', 0))  # Xona uzunligi (metr)
             room_width = float(data.get('room_width', 0))    # Xona kengligi (metr)
             room_height = float(data.get('room_height', 0))  # Xona balandligi (metr)
-            reflection_factors = data.get('reflection_factors', [80, 80, 30])  # Oqimlarning qaytish koeffitsienti
-            illumination = float(data.get('illumination', 300))  # Kerakli yoritish (lux)
-            reserve_factor = float(data.get('reserve_factor', 1.4))  # Zaxira koeffitsienti (odam tomonidan kiritilgan)
-            lamp_watt = float(data.get('lamp_watt', 8))  # Lampaning quvvati (Watt)
-            lamp_lumen = float(data.get('lamp_lumen', 600))  # Lampaning yorug'lik oqimi (lumen)
+            reflection_factors = data.get('reflection_factors', [80, 80, 30])  # Refleksiya koeffitsientlari
+            illumination = float(data.get('illumination', 300))  # Kerakli yorug'lik (lux)
+            reserve_factor = float(data.get('reserve_factor', 1.4))  # Zaxira koeffitsienti
 
-            # Agar lampaning quvvati yoki lumen kiritilmagan bo'lsa, xato
-            if lamp_watt == 0 or lamp_lumen == 0:
-                return Response({"status": "error", "message": "Lamp watt and lumen must be provided."}, status=status.HTTP_400_BAD_REQUEST)
-
-            # Xonani umumiy maydoni
+            # Xona maydoni
             total_area = room_length * room_width
 
-            # Reflection factors orqali samarali yoritishni hisoblash
+            # Refleksiya koeffitsientlari bo'yicha samarali yorug'likni hisoblash
             effective_illumination = illumination * (sum(reflection_factors) / 300)
 
             # Lampalar ro'yxati
@@ -156,49 +148,39 @@ class LampCalculationAPIView(APIView):
                 {"name": "ARS/R UNI LED 300 4000K", "watt": 16, "lumen": 1500, "diameter": 575, "weight": 0.36},
             ]
 
-            # Lampaning fluxini hisoblash (lumen)
-            lamp_flux = lamp_lumen  # Lumenni kiritgan bo'lsangiz, uni ishlatamiz
-
-            # Kerakli lampalar sonini hisoblash
-            utilization_factor = 0.6  # Ishlatish koeffitsienti (taxminiy)
-            maintenance_factor = reserve_factor  # Zaxira koeffitsienti
-
-            # Lampalar sonini hisoblash
-            required_lamps_count = (effective_illumination * total_area) / (lamp_flux * utilization_factor * maintenance_factor)
-            required_lamps_count = max(1, round(required_lamps_count))  # Kamida 1 lampochka kerak
-
-            # Asl lampaning umumiy quvvati va yorug'lik
-            total_watt_user_lamp = lamp_watt * required_lamps_count
-            total_lumen_user_lamp = lamp_lumen * required_lamps_count
-
-            # Eng samarali energiya sarflaydigan lampochkani topish
+            # Eng samarali lampani topish
             best_choice = None
-            min_total_watt = float('inf')
+            max_efficiency = 0  # Eng yuqori samaradorlik (lm/W)
             best_lamps_count = 0
+            min_total_watt = float('inf')  # Eng kam quvvat sarfi
+
             for lamp in lamps_list:
-                # Har bir lampaning kerakli sonini hisoblash
-                lamp_count = round((effective_illumination * total_area) / (lamp['lumen'] * utilization_factor * maintenance_factor))
-                lamp_count = max(1, lamp_count)  # Kamida 1 lampochka kerak
+                # Har bir lampaning samaradorligi (lm/W)
+                efficiency = lamp['lumen'] / lamp['watt']
 
-                # Lampaning umumiy quvvati va yorug'lik
+                # Kerakli lampalar sonini hisoblash
+                lamp_count = round((effective_illumination * total_area) / (lamp['lumen'] * 0.6 * reserve_factor))
+                lamp_count = max(1, lamp_count)  # Kamida 1 ta lampa
+
+                # Umumiy quvvat sarfi
                 total_watt = lamp['watt'] * lamp_count
-                total_lumen = lamp['lumen'] * lamp_count
 
-                # Eng kam energiya sarflaydigan lampochkani tanlash
-                if total_watt < min_total_watt:
-                    min_total_watt = total_watt
+                # Eng yuqori samaradorlik va eng kam quvvat sarfi bo'yicha tanlash
+                if efficiency > max_efficiency or (efficiency == max_efficiency and total_watt < min_total_watt):
+                    max_efficiency = efficiency
                     best_choice = lamp
                     best_lamps_count = lamp_count
+                    min_total_watt = total_watt
 
             # Energiya tejashni hisoblash
-            energy_saved = total_watt_user_lamp - min_total_watt
+            energy_saved = (best_choice['watt'] * best_lamps_count) - min_total_watt
 
-            # Kuni davomida tok sarfi va qiymatini hisoblash
-            working_hours_per_day = 5  # Bitta lampochka kuniga necha soat ishlaydi
+            # Kunlik energiya tejash (soat va narx bo'yicha)
+            working_hours_per_day = 5  # Kuniga 5 soat ishlaydi
             cost_per_kwh = 450  # 1 kWh = 450 so'm
-            total_cost = (total_watt_user_lamp * working_hours_per_day) / 1000 * cost_per_kwh
             energy_saved_cost = (energy_saved * working_hours_per_day) / 1000 * cost_per_kwh
 
+            # Natijani qaytarish
             response_data = {
                 "room_length": room_length,
                 "room_width": room_width,
@@ -213,10 +195,11 @@ class LampCalculationAPIView(APIView):
                     "lumen": best_choice["lumen"],
                     "diameter": best_choice["diameter"],
                     "weight": best_choice["weight"],
-                    "tok_teyadi": round(energy_saved, 2),
-                    "foyda_som": round(energy_saved_cost, 2),
-                    "yoruglik": best_choice["lumen"] * best_lamps_count,
-                    "number_of_lamps": best_lamps_count
+                    "samaradorlik": round(max_efficiency, 2),  # lm/W
+                    "tok_teyadi": round(energy_saved, 2),  # W
+                    "foyda_som": round(energy_saved_cost, 2),  # so'm
+                    "yoruglik": best_choice["lumen"] * best_lamps_count,  # lumen
+                    "number_of_lamps": best_lamps_count  # lampalar soni
                 }
             }
 
