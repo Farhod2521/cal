@@ -109,6 +109,7 @@ class RoomTypeCategoryAPIView(APIView):
 
 
 
+
 class LampCalculationAPIView(APIView):
     parser_classes = [JSONParser]
 
