@@ -154,6 +154,7 @@ class LampCalculationAPIView(APIView):
             max_efficiency = 0  # Eng yuqori samaradorlik (lm/W)
             best_lamps_count = 0
             min_total_watt = float('inf')  # Eng kam quvvat sarfi
+            why_reasons = []  # Lampa tanlangan sabablar
 
             for lamp in lamps_list:
                 # Har bir lampaning samaradorligi (lm/W)
@@ -172,6 +173,16 @@ class LampCalculationAPIView(APIView):
                     best_choice = lamp
                     best_lamps_count = lamp_count
                     min_total_watt = total_watt
+
+            # Sabablarni aniqlash
+            if best_choice:
+                why_reasons = [
+                    f"Chunki bu lampa quvvatni ancha tejaydi (samaradorligi: {max_efficiency:.2f} lm/W).",
+                    f"Xona maydoni ({total_area} m²) va balandligi ({room_height} m) uchun mos keladi.",
+                    f"Kerakli yorug'lik ({illumination} lux)ni ta'minlaydi.",
+                    f"Zaxira koeffitsienti ({reserve_factor}) hisobga olindi.",
+                    f"Lampalar soni ({best_lamps_count}) va umumiy quvvat sarfi ({min_total_watt} W) optimal.",
+                ]
 
             # Energiya tejashni hisoblash
             energy_saved = (best_choice['watt'] * best_lamps_count) - min_total_watt
@@ -200,7 +211,8 @@ class LampCalculationAPIView(APIView):
                     "tok_teyadi": round(energy_saved, 2),  # W
                     "foyda_som": round(energy_saved_cost, 2),  # so'm
                     "yoruglik": best_choice["lumen"] * best_lamps_count,  # lumen
-                    "number_of_lamps": best_lamps_count  # lampalar soni
+                    "number_of_lamps": best_lamps_count,  # lampalar soni
+                    "why": why_reasons  # Lampa tanlangan sabablar
                 }
             }
 
