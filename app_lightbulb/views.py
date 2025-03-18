@@ -121,7 +121,7 @@ class LampCalculationAPIView(APIView):
             room_height = float(data.get('room_height', 0))
             reflection_factors = data.get('reflection_factors', [80, 80, 30])
             illumination = float(data.get('illumination', 300))
-            reserve_factor = float(data.get('reserve_factor', 1.5))  # Tuzatilgan: 1.5 ga o'zgartirildi
+            reserve_factor = float(data.get('reserve_factor', 1.5))
 
             total_area = room_length * room_width
             effective_illumination = illumination * (sum(reflection_factors) / 300)
@@ -153,7 +153,8 @@ class LampCalculationAPIView(APIView):
 
             for lamp in lamps_list:
                 efficiency = lamp['lumen'] / lamp['watt']
-                lamp_count = math.ceil((effective_illumination * total_area * reserve_factor) / lamp['lumen'] * (1 + (room_height - 2.5) * 0.1))
+                required_lumen = effective_illumination * total_area * reserve_factor
+                lamp_count = math.ceil(required_lumen / lamp['lumen'] * (1 + (room_height - 2.5) * 0.1))
                 lamp_count = max(1, lamp_count)
                 total_watt = lamp['watt'] * lamp_count
 
@@ -202,5 +203,4 @@ class LampCalculationAPIView(APIView):
 
             return Response(response_data, status=status.HTTP_200_OK)
 
-        except Exception as e:
-            return Response({"status": "error", "message": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        
