@@ -121,7 +121,7 @@ class LampCalculationAPIView(APIView):
             room_height = float(data.get('room_height', 0))
             reflection_factors = data.get('reflection_factors', [80, 80, 30])
             illumination = float(data.get('illumination', 300))
-            reserve_factor = float(data.get('reserve_factor', 1.4))
+            reserve_factor = float(data.get('reserve_factor', 1.5))  # Tuzatilgan: 1.5 ga o'zgartirildi
 
             total_area = room_length * room_width
             effective_illumination = illumination * (sum(reflection_factors) / 300)
@@ -191,12 +191,12 @@ class LampCalculationAPIView(APIView):
                     "lumen": best_choice["lumen"],
                     "diameter": best_choice["diameter"],
                     "weight": best_choice["weight"],
-                    "samaradorlik": round(max_efficiency, 2),  # lm/W
-                    "tok_teyadi": round(energy_saved, 2),  # W
-                    "foyda_som": round(energy_saved_cost, 2),  # so'm
-                    "yoruglik": best_choice["lumen"] * best_lamps_count,  # lumen
-                    "number_of_lamps": best_lamps_count,  # lampalar soni
-                    "why": why_reasons  # Lampa tanlangan sabablar
+                    "samaradorlik": round(max_efficiency, 2),
+                    "tok_teyadi": round(energy_saved, 2),
+                    "foyda_som": round(energy_saved_cost, 2),
+                    "yoruglik": best_choice["lumen"] * best_lamps_count,
+                    "number_of_lamps": best_lamps_count,
+                    "why": why_reasons
                 }
             }
 
@@ -204,3 +204,8 @@ class LampCalculationAPIView(APIView):
 
         except Exception as e:
             return Response({"status": "error", "message": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+
