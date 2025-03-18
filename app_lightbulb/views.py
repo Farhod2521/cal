@@ -107,25 +107,10 @@ class RoomTypeCategoryAPIView(APIView):
 import math
 
 
-
-
 class LampCalculationAPIView(APIView):
     parser_classes = [JSONParser]
 
-    def post(self, request, *args, **kwargs):
-        try:
-            data = request.data
-            room_length = float(data.get('room_length', 0))
-            room_width = float(data.get('room_width', 0))
-            room_height = float(data.get('room_height', 0))
-            reflection_factors = data.get('reflection_factors', [80, 80, 30])
-            illumination = float(data.get('illumination', 300))
-            reserve_factor = float(data.get('reserve_factor', 1.5))
-
-            total_area = room_length * room_width
-            effective_illumination = illumination * (sum(reflection_factors) / 300)
-
-            lamps_list = [
+    LAMPS_LIST = [
                 {"name": "ACQUA C 06 WH 4000K", "watt": 8, "lumen": 600, "diameter": 110, "weight": 0.21},
                 {"name": "ACQUA C 12 WH 4000K", "watt": 14, "lumen": 1200, "diameter": 150, "weight": 0.34},
                 {"name": "ACQUA C 18 WH 4000K", "watt": 22, "lumen": 2100, "diameter": 180, "weight": 0.36},
@@ -144,87 +129,63 @@ class LampCalculationAPIView(APIView):
                 {"name": "ARS/R UNI LED 300 4000K", "watt": 16, "lumen": 1500, "diameter": 575, "weight": 0.36},
             ]
 
+    def post(self, request, *args, **kwargs):
+        try:
+            data = request.data
+            room_length = float(data.get('room_length', 0))
+            room_width = float(data.get('room_width', 0))
+            room_height = float(data.get('room_height', 0))
+            illumination = float(data.get('illumination', 300))
+            reserve_factor = float(data.get('reserve_factor', 1.5))
+            reflection_factors = data.get('reflection_factors', [80, 80, 30])
+
+            total_area = room_length * room_width
+            effective_illumination = illumination * (sum(reflection_factors) / 300)
+            required_lumen = effective_illumination * total_area * reserve_factor
+
             best_choice = None
-            max_efficiency = 0
             best_lamps_count = 0
             min_total_watt = float('inf')
-            why_reasons = []
 
-            for lamp in lamps_list:
-                efficiency = lamp['lumen'] / lamp['watt']
-                required_lumen = effective_illumination * total_area * reserve_factor
-                lamp_count = math.ceil(required_lumen / lamp['lumen'] * (1 + (room_height - 2.5) * 0.1))
-                lamp_count = max(1, lamp_count)
+            for lamp in self.LAMPS_LIST:
+                lamp_count = max(1, math.ceil(required_lumen / lamp['lumen']))
                 total_watt = lamp['watt'] * lamp_count
+                efficiency = lamp['lumen'] / lamp['watt']
 
-                current_max_efficiency = 0
-                current_min_total_watt = float('inf')
-                current_best_choice = None
-
-                if total_area < 10:  # Kichik xona
-                    if lamp['diameter'] < 600:
-                        if efficiency > current_max_efficiency or (efficiency == current_max_efficiency and total_watt < current_min_total_watt):
-                            current_max_efficiency = efficiency
-                            current_best_choice = lamp
-                            current_min_total_watt = total_watt
-
-                elif room_height > 3.5: # Baland xona
-                     if lamp['lumen'] > 3000:
-                        if efficiency > current_max_efficiency or (efficiency == current_max_efficiency and total_watt < current_min_total_watt):
-                            current_max_efficiency = efficiency
-                            current_best_choice = lamp
-                            current_min_total_watt = total_watt
+                if total_area < 10 and lamp['diameter'] < 600:
+                    is_suitable = True
+                elif room_height > 3.5 and lamp['lumen'] > 3000:
+                    is_suitable = True
                 else:
-                    if efficiency > current_max_efficiency or (efficiency == current_max_efficiency and total_watt < current_min_total_watt):
-                        current_max_efficiency = efficiency
-                        current_best_choice = lamp
-                        current_min_total_watt = total_watt
+                    is_suitable = True
 
-                if current_best_choice:
-                    if current_max_efficiency > max_efficiency or (current_max_efficiency == max_efficiency and current_min_total_watt < min_total_watt):
-                        max_efficiency = current_max_efficiency
-                        best_choice = current_best_choice
-                        best_lamps_count = lamp_count
-                        min_total_watt = current_min_total_watt
+                if is_suitable and (total_watt < min_total_watt or efficiency > best_choice.get('efficiency', 0)):
+                    best_choice = lamp.copy()
+                    best_choice['efficiency'] = efficiency
+                    best_lamps_count = lamp_count
+                    min_total_watt = total_watt
 
             if best_choice:
-                why_reasons = [
-                    f"Chunki bu lampa quvvatni ancha tejaydi (samaradorligi: {max_efficiency:.2f} lm/W).",
-                    f"Xona maydoni ({total_area} m²) va balandligi ({room_height} m) uchun mos keladi.",
-                    f"Kerakli yorug'lik ({illumination} lux)ni ta'minlaydi.",
-                    f"Zaxira koeffitsienti ({reserve_factor}) hisobga olindi.",
-                    f"Lampalar soni ({best_lamps_count}) va umumiy quvvat sarfi ({min_total_watt} W) optimal.",
-                ]
-
-            energy_saved = (best_choice['watt'] * best_lamps_count) - min_total_watt
-            working_hours_per_day = 5
-            cost_per_kwh = 450
-            energy_saved_cost = (energy_saved * working_hours_per_day) / 1000 * cost_per_kwh
-
-            response_data = {
-                "room_length": room_length,
-                "room_width": room_width,
-                "room_height": room_height,
-                "reflection_factors": reflection_factors,
-                "illumination": illumination,
-                "working_surface_height": 0,
-                "reserve_factor": reserve_factor,
-                "tavsiya_qilinadi": {
-                    "lamp": best_choice["name"],
-                    "watt": best_choice["watt"],
-                    "lumen": best_choice["lumen"],
-                    "diameter": best_choice["diameter"],
-                    "weight": best_choice["weight"],
-                    "samaradorlik": round(max_efficiency, 2),
-                    "tok_teyadi": round(energy_saved, 2),
-                    "foyda_som": round(energy_saved_cost, 2),
-                    "yoruglik": best_choice["lumen"] * best_lamps_count,
-                    "number_of_lamps": best_lamps_count,
-                    "why": why_reasons
+                response_data = {
+                    "room_length": room_length,
+                    "room_width": room_width,
+                    "room_height": room_height,
+                    "illumination": illumination,
+                    "reserve_factor": reserve_factor,
+                    "tavsiya_qilinadi": {
+                        "lamp": best_choice["name"],
+                        "watt": best_choice["watt"],
+                        "lumen": best_choice["lumen"],
+                        "diameter": best_choice["diameter"],
+                        "weight": best_choice["weight"],
+                        "samaradorlik": round(best_choice['efficiency'], 2),
+                        "yoruglik": best_choice["lumen"] * best_lamps_count,
+                        "number_of_lamps": best_lamps_count,
+                    }
                 }
-            }
-
-            return Response(response_data, status=status.HTTP_200_OK)
+                return Response(response_data, status=status.HTTP_200_OK)
+            else:
+                return Response({"status": "error", "message": "Mos lampa topilmadi."}, status=status.HTTP_400_BAD_REQUEST)
 
         except Exception as e:
             return Response({"status": "error", "message": str(e)}, status=status.HTTP_400_BAD_REQUEST)
