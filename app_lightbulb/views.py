@@ -154,10 +154,8 @@ class LampCalculationAPIView(APIView):
                 {"name": "ARCTIC STANDARD 1500 TH 4000K", "watt": 44, "lumen": 4500, "diameter": 1582, "weight": 0.36},
                 {"name": "ARCTIC.OPL ECO LED 1200 TH EM 5000K", "watt": 36, "lumen": 3400, "diameter": 1280, "weight": 0.36},
                 {"name": "ARS/R UNI LED 300 4000K", "watt": 16, "lumen": 1500, "diameter": 575, "weight": 0.36},
-
-
-
             ]
+
             # Lampaning fluxini hisoblash (lumen)
             lamp_flux = lamp_lumen  # Lumenni kiritgan bo'lsangiz, uni ishlatamiz
 
