@@ -104,7 +104,7 @@ class RoomTypeCategoryAPIView(APIView):
 
 
 
-
+import math
 
 
 
@@ -115,22 +115,17 @@ class LampCalculationAPIView(APIView):
 
     def post(self, request, *args, **kwargs):
         try:
-            # Foydalanuvchi ma'lumotlarini olish
             data = request.data
-            room_length = float(data.get('room_length', 0))  # Xona uzunligi (metr)
-            room_width = float(data.get('room_width', 0))    # Xona kengligi (metr)
-            room_height = float(data.get('room_height', 0))  # Xona balandligi (metr)
-            reflection_factors = data.get('reflection_factors', [80, 80, 30])  # Refleksiya koeffitsientlari
-            illumination = float(data.get('illumination', 300))  # Kerakli yorug'lik (lux)
-            reserve_factor = float(data.get('reserve_factor', 1.4))  # Zaxira koeffitsienti
+            room_length = float(data.get('room_length', 0))
+            room_width = float(data.get('room_width', 0))
+            room_height = float(data.get('room_height', 0))
+            reflection_factors = data.get('reflection_factors', [80, 80, 30])
+            illumination = float(data.get('illumination', 300))
+            reserve_factor = float(data.get('reserve_factor', 1.4))
 
-            # Xona maydoni
             total_area = room_length * room_width
-
-            # Refleksiya koeffitsientlari bo'yicha samarali yorug'likni hisoblash
             effective_illumination = illumination * (sum(reflection_factors) / 300)
 
-            # Lampalar ro'yxati
             lamps_list = [
                 {"name": "ACQUA C 06 WH 4000K", "watt": 8, "lumen": 600, "diameter": 110, "weight": 0.21},
                 {"name": "ACQUA C 12 WH 4000K", "watt": 14, "lumen": 1200, "diameter": 150, "weight": 0.34},
@@ -150,32 +145,24 @@ class LampCalculationAPIView(APIView):
                 {"name": "ARS/R UNI LED 300 4000K", "watt": 16, "lumen": 1500, "diameter": 575, "weight": 0.36},
             ]
 
-            # Eng samarali lampani topish
             best_choice = None
-            max_efficiency = 0  # Eng yuqori samaradorlik (lm/W)
+            max_efficiency = 0
             best_lamps_count = 0
-            min_total_watt = float('inf')  # Eng kam quvvat sarfi
-            why_reasons = []  # Lampa tanlangan sabablar
+            min_total_watt = float('inf')
+            why_reasons = []
 
             for lamp in lamps_list:
-                # Har bir lampaning samaradorligi (lm/W)
                 efficiency = lamp['lumen'] / lamp['watt']
-
-                # Kerakli lampalar sonini hisoblash
-                lamp_count = round((illumination * total_area * reserve_factor) / (lamp['lumen'] * 0.6))
-                lamp_count = max(1, lamp_count)  # Kamida 1 ta lampa
-
-                # Umumiy quvvat sarfi
+                lamp_count = math.ceil((effective_illumination * total_area * reserve_factor) / lamp['lumen'] * (1 + (room_height - 2.5) * 0.1))
+                lamp_count = max(1, lamp_count)
                 total_watt = lamp['watt'] * lamp_count
 
-                # Eng yuqori samaradorlik va eng kam quvvat sarfi bo'yicha tanlash
                 if efficiency > max_efficiency or (efficiency == max_efficiency and total_watt < min_total_watt):
                     max_efficiency = efficiency
                     best_choice = lamp
                     best_lamps_count = lamp_count
                     min_total_watt = total_watt
 
-            # Sabablarni aniqlash
             if best_choice:
                 why_reasons = [
                     f"Chunki bu lampa quvvatni ancha tejaydi (samaradorligi: {max_efficiency:.2f} lm/W).",
@@ -185,15 +172,11 @@ class LampCalculationAPIView(APIView):
                     f"Lampalar soni ({best_lamps_count}) va umumiy quvvat sarfi ({min_total_watt} W) optimal.",
                 ]
 
-            # Energiya tejashni hisoblash
             energy_saved = (best_choice['watt'] * best_lamps_count) - min_total_watt
-
-            # Kunlik energiya tejash (soat va narx bo'yicha)
-            working_hours_per_day = 5  # Kuniga 5 soat ishlaydi
-            cost_per_kwh = 450  # 1 kWh = 450 so'm
+            working_hours_per_day = 5
+            cost_per_kwh = 450
             energy_saved_cost = (energy_saved * working_hours_per_day) / 1000 * cost_per_kwh
 
-            # Natijani qaytarish
             response_data = {
                 "room_length": room_length,
                 "room_width": room_width,
