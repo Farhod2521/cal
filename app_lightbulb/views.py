@@ -157,27 +157,35 @@ class LampCalculationAPIView(APIView):
                 lamp_count = max(1, lamp_count)
                 total_watt = lamp['watt'] * lamp_count
 
+                current_max_efficiency = 0
+                current_min_total_watt = float('inf')
+                current_best_choice = None
+
                 if total_area < 10:  # Kichik xona
                     if lamp['diameter'] < 600:
-                        if efficiency > max_efficiency or (efficiency == max_efficiency and total_watt < min_total_watt):
-                            max_efficiency = efficiency
-                            best_choice = lamp
-                            best_lamps_count = lamp_count
-                            min_total_watt = total_watt
+                        if efficiency > current_max_efficiency or (efficiency == current_max_efficiency and total_watt < current_min_total_watt):
+                            current_max_efficiency = efficiency
+                            current_best_choice = lamp
+                            current_min_total_watt = total_watt
 
                 elif room_height > 3.5: # Baland xona
                      if lamp['lumen'] > 3000:
-                        if efficiency > max_efficiency or (efficiency == max_efficiency and total_watt < min_total_watt):
-                            max_efficiency = efficiency
-                            best_choice = lamp
-                            best_lamps_count = lamp_count
-                            min_total_watt = total_watt
+                        if efficiency > current_max_efficiency or (efficiency == current_max_efficiency and total_watt < current_min_total_watt):
+                            current_max_efficiency = efficiency
+                            current_best_choice = lamp
+                            current_min_total_watt = total_watt
                 else:
-                    if efficiency > max_efficiency or (efficiency == max_efficiency and total_watt < min_total_watt):
-                        max_efficiency = efficiency
-                        best_choice = lamp
+                    if efficiency > current_max_efficiency or (efficiency == current_max_efficiency and total_watt < current_min_total_watt):
+                        current_max_efficiency = efficiency
+                        current_best_choice = lamp
+                        current_min_total_watt = total_watt
+
+                if current_best_choice:
+                    if current_max_efficiency > max_efficiency or (current_max_efficiency == max_efficiency and current_min_total_watt < min_total_watt):
+                        max_efficiency = current_max_efficiency
+                        best_choice = current_best_choice
                         best_lamps_count = lamp_count
-                        min_total_watt = total_watt
+                        min_total_watt = current_min_total_watt
 
             if best_choice:
                 why_reasons = [
