@@ -108,6 +108,7 @@ class RoomTypeCategoryAPIView(APIView):
 
 
 
+
 class LampCalculationAPIView(APIView):
     parser_classes = [JSONParser]
 
@@ -159,7 +160,7 @@ class LampCalculationAPIView(APIView):
                 efficiency = lamp['lumen'] / lamp['watt']
 
                 # Kerakli lampalar sonini hisoblash
-                lamp_count = round((effective_illumination * total_area) / (lamp['lumen'] * 0.6 * reserve_factor))
+                lamp_count = round((illumination * total_area * reserve_factor) / (lamp['lumen'] * 0.6))
                 lamp_count = max(1, lamp_count)  # Kamida 1 ta lampa
 
                 # Umumiy quvvat sarfi
