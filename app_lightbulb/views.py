@@ -109,7 +109,6 @@ import math
 
 
 
-
 class LampCalculationAPIView(APIView):
     parser_classes = [JSONParser]
 
@@ -203,4 +202,5 @@ class LampCalculationAPIView(APIView):
 
             return Response(response_data, status=status.HTTP_200_OK)
 
-        
+        except Exception as e:
+            return Response({"status": "error", "message": str(e)}, status=status.HTTP_400_BAD_REQUEST)
