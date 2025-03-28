@@ -223,7 +223,7 @@ class LampCalculationAPIView(APIView):
         
         # 1. Xona yuzasi
         S = room_length * room_width
-        
+        room_height_1 = room_height
         # 2. Yorug'lik oqimi
         light_flux = illumination * S
         room_height  = room_height - table_height  - lamp_height/100
@@ -256,7 +256,7 @@ class LampCalculationAPIView(APIView):
         response_data = {
             "room_length": room_length,
             "room_width": room_width,
-            "room_height": room_height,
+            "room_height": room_height_1,
             "illumination": illumination,
             "tavsiya_qilinadi": {
                 "lamp": best_choice["name"],
