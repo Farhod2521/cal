@@ -258,6 +258,7 @@ class LampCalculationAPIView(APIView):
             "room_width": room_width,
             "room_height": room_height_1,
             "illumination": illumination,
+            "table_height": table_height,
             "tavsiya_qilinadi": {
                 "lamp": best_choice["name"],
                 "watt": best_choice["watt"],
