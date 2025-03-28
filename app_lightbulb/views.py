@@ -218,15 +218,17 @@ class LampCalculationAPIView(APIView):
         room_width = float(data.get('room_width', 0))
         room_height = float(data.get('room_height', 0))
         illumination = float(data.get('illumination', 300))
+        table_height = float(data.get('table_height', 0))
+        lamp_height = float(data.get('lamp_height', 0))
         
         # 1. Xona yuzasi
         S = room_length * room_width
         
         # 2. Yorug'lik oqimi
         light_flux = illumination * S
-        
+        room_height  = room_height - table_height  - lamp_height/100
         # 3. Xona balandligi koeffitsiyenti
-        if 3 <= room_height < 4:
+        if 0 <= room_height < 4:
             height_coef = 1.2
         elif 4 <= room_height < 6:
             height_coef = 1.6
