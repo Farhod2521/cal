@@ -107,91 +107,162 @@ class RoomTypeCategoryAPIView(APIView):
 import math
 
 
+# class LampCalculationAPIView(APIView):
+#     parser_classes = [JSONParser]
+
+#     LAMPS_LIST = [
+#                 ############################## O'zim ####################################################  
+#                 {"name": "LM-LBL 7W", "watt": 7, "lumen": 630, "diameter": 110, "weight": 0.21},
+#                 {"name": "AK-LBL 12W", "watt": 12, "lumen": 1080, "diameter": 110, "weight": 0.21},
+
+#                 ########################### CHET ########################################################
+#             #     {"name": "ACQUA C 06 WH 4000K", "watt": 8, "lumen": 600, "diameter": 110, "weight": 0.21},
+#             #     {"name": "ACQUA C 12 WH 4000K", "watt": 14, "lumen": 1200, "diameter": 150, "weight": 0.34},
+#             #     {"name": "ACQUA C 18 WH 4000K", "watt": 22, "lumen": 2100, "diameter": 180, "weight": 0.36},
+#             #     {"name": "ASM/S LED 1500 SCHOOL 4000K CRI90", "watt": 24, "lumen": 2200, "diameter": 1610, "weight": 0.36},
+#             #     {"name": "BACK LED 595 STANDARD 4000K", "watt": 40, "lumen": 4000, "diameter": 575, "weight": 0.36},
+#             #     {"name": "ALD UNI LED 600 4000K", "watt": 24, "lumen": 2000, "diameter": 630, "weight": 0.36},
+#             #     {"name": "ALD UNI LED 1200 4000K", "watt": 30, "lumen": 2600, "diameter": 1240, "weight": 0.36},
+#             #     {"name": "ALD UNI LED 1200 4000K CRI90", "watt": 30, "lumen": 2400, "diameter": 1240, "weight": 0.36},
+#             #     {"name": "ALS.OPL UNI LED 1200 TH 4000K", "watt": 18, "lumen": 2000, "diameter": 12700, "weight": 0.36},
+#             #     {"name": "ALS.OPL UNI LED 600x200 4000K CRI90", "watt": 18, "lumen": 1800, "diameter": 180, "weight": 0.36},
+#             #     {"name": "ALS.OPL UNI LED 1200 4000K", "watt": 32, "lumen": 3600, "diameter": 1270, "weight": 0.36},
+#             #     {"name": "ALS.OPL UNI LED 600x600 (36) 4000K", "watt": 32, "lumen": 4000, "diameter": 1270, "weight": 0.36},
+#             #     {"name": "ALS.OPL UNI LED 1200 EM 4000K CRI90", "watt": 32, "lumen": 3200, "diameter": 1270, "weight": 0.36},
+#             #     {"name": "ARCTIC STANDARD 1500 TH 4000K", "watt": 44, "lumen": 4500, "diameter": 1582, "weight": 0.36},
+#             #     {"name": "ARCTIC.OPL ECO LED 1200 TH EM 5000K", "watt": 36, "lumen": 3400, "diameter": 1280, "weight": 0.36},
+#             #     {"name": "ARS/R UNI LED 300 4000K", "watt": 16, "lumen": 1500, "diameter": 575, "weight": 0.36},
+#             # 
+#             ]
+
+#     def post(self, request, *args, **kwargs):
+#         try:
+#             data = request.data
+#             room_length = float(data.get('room_length', 0))
+#             room_width = float(data.get('room_width', 0))
+#             room_height = float(data.get('room_height', 0))
+#             illumination = float(data.get('illumination', 300))
+#             reserve_factor = float(data.get('reserve_factor', 1.5))
+#             reflection_factors = data.get('reflection_factors', [80, 80, 30])
+
+#             total_area = room_length * room_width
+#             effective_illumination = illumination * (sum(reflection_factors) / 300)
+#             required_lumen = effective_illumination * total_area * reserve_factor
+
+#             best_choice = None
+#             best_lamps_count = 0
+#             min_total_watt = float('inf')
+
+#             for lamp in self.LAMPS_LIST:
+#                 lamp_count = max(1, math.ceil(required_lumen / lamp['lumen']))
+#                 total_watt = lamp['watt'] * lamp_count
+#                 efficiency = lamp['lumen'] / lamp['watt']
+
+#                 if total_area < 10 and lamp['diameter'] < 600:
+#                     is_suitable = True
+#                 elif room_height > 3.5 and lamp['lumen'] > 3000:
+#                     is_suitable = True
+#                 else:
+#                     is_suitable = True
+
+#                 if is_suitable and (total_watt < min_total_watt or efficiency > best_choice.get('efficiency', 0)):
+#                     best_choice = lamp.copy()
+#                     best_choice['efficiency'] = efficiency
+#                     best_lamps_count = lamp_count
+#                     min_total_watt = total_watt
+
+#             if best_choice:
+#                 response_data = {
+#                     "room_length": room_length,
+#                     "room_width": room_width,
+#                     "room_height": room_height,
+#                     "illumination": illumination,
+#                     "reserve_factor": reserve_factor,
+#                     "tavsiya_qilinadi": {
+#                         "lamp": best_choice["name"],
+#                         "watt": best_choice["watt"],
+#                         "lumen": best_choice["lumen"],
+#                         "diameter": best_choice["diameter"],
+#                         "weight": best_choice["weight"],
+#                         "samaradorlik": round(best_choice['efficiency'], 2),
+#                         "yoruglik": best_choice["lumen"] * best_lamps_count,
+#                         "number_of_lamps": best_lamps_count,
+#                     }
+#                 }
+#                 return Response(response_data, status=status.HTTP_200_OK)
+#             else:
+#                 return Response({"status": "error", "message": "Mos lampa topilmadi."}, status=status.HTTP_400_BAD_REQUEST)
+
+#         except Exception as e:
+#             return Response({"status": "error", "message": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
 class LampCalculationAPIView(APIView):
     parser_classes = [JSONParser]
 
     LAMPS_LIST = [
-                ############################## O'zim ####################################################  
-                {"name": "LM-LBL 7W", "watt": 7, "lumen": 630, "diameter": 110, "weight": 0.21},
-                {"name": "AK-LBL 12W", "watt": 12, "lumen": 1080, "diameter": 110, "weight": 0.21},
+        {"name": "LM-LBL 5W E27", "watt": 5, "lumen": 450, "diameter": 110, "weight": 0.21},
+        {"name": "LM-LBL E27", "watt": 7, "lumen": 630, "diameter": 110, "weight": 0.21},
+        {"name": "LM-LBL 10W E27", "watt": 10, "lumen": 900, "diameter": 110, "weight": 0.21},
+        {"name": "LM-LBL 12W E27", "watt": 12, "lumen": 1080, "diameter": 110, "weight": 0.21},
+        {"name": "LM-SLPS 18W", "watt": 18, "lumen": 630, "diameter": 110, "weight": 0.21},
+        {"name": "LM-SLPS 24W", "watt": 24, "lumen": 1860, "diameter": 110, "weight": 0.21},
+        {"name": "LM - LPSS 18W", "watt": 18, "lumen": 2070, "diameter": 110, "weight": 0.21},
+        {"name": "LM - LPSS 12W", "watt": 12, "lumen": 870, "diameter": 110, "weight": 0.21},
 
-                ########################### CHET ########################################################
-            #     {"name": "ACQUA C 06 WH 4000K", "watt": 8, "lumen": 600, "diameter": 110, "weight": 0.21},
-            #     {"name": "ACQUA C 12 WH 4000K", "watt": 14, "lumen": 1200, "diameter": 150, "weight": 0.34},
-            #     {"name": "ACQUA C 18 WH 4000K", "watt": 22, "lumen": 2100, "diameter": 180, "weight": 0.36},
-            #     {"name": "ASM/S LED 1500 SCHOOL 4000K CRI90", "watt": 24, "lumen": 2200, "diameter": 1610, "weight": 0.36},
-            #     {"name": "BACK LED 595 STANDARD 4000K", "watt": 40, "lumen": 4000, "diameter": 575, "weight": 0.36},
-            #     {"name": "ALD UNI LED 600 4000K", "watt": 24, "lumen": 2000, "diameter": 630, "weight": 0.36},
-            #     {"name": "ALD UNI LED 1200 4000K", "watt": 30, "lumen": 2600, "diameter": 1240, "weight": 0.36},
-            #     {"name": "ALD UNI LED 1200 4000K CRI90", "watt": 30, "lumen": 2400, "diameter": 1240, "weight": 0.36},
-            #     {"name": "ALS.OPL UNI LED 1200 TH 4000K", "watt": 18, "lumen": 2000, "diameter": 12700, "weight": 0.36},
-            #     {"name": "ALS.OPL UNI LED 600x200 4000K CRI90", "watt": 18, "lumen": 1800, "diameter": 180, "weight": 0.36},
-            #     {"name": "ALS.OPL UNI LED 1200 4000K", "watt": 32, "lumen": 3600, "diameter": 1270, "weight": 0.36},
-            #     {"name": "ALS.OPL UNI LED 600x600 (36) 4000K", "watt": 32, "lumen": 4000, "diameter": 1270, "weight": 0.36},
-            #     {"name": "ALS.OPL UNI LED 1200 EM 4000K CRI90", "watt": 32, "lumen": 3200, "diameter": 1270, "weight": 0.36},
-            #     {"name": "ARCTIC STANDARD 1500 TH 4000K", "watt": 44, "lumen": 4500, "diameter": 1582, "weight": 0.36},
-            #     {"name": "ARCTIC.OPL ECO LED 1200 TH EM 5000K", "watt": 36, "lumen": 3400, "diameter": 1280, "weight": 0.36},
-            #     {"name": "ARS/R UNI LED 300 4000K", "watt": 16, "lumen": 1500, "diameter": 575, "weight": 0.36},
-            # 
-            ]
+    ]
 
     def post(self, request, *args, **kwargs):
-        try:
-            data = request.data
-            room_length = float(data.get('room_length', 0))
-            room_width = float(data.get('room_width', 0))
-            room_height = float(data.get('room_height', 0))
-            illumination = float(data.get('illumination', 300))
-            reserve_factor = float(data.get('reserve_factor', 1.5))
-            reflection_factors = data.get('reflection_factors', [80, 80, 30])
-
-            total_area = room_length * room_width
-            effective_illumination = illumination * (sum(reflection_factors) / 300)
-            required_lumen = effective_illumination * total_area * reserve_factor
-
-            best_choice = None
-            best_lamps_count = 0
-            min_total_watt = float('inf')
-
-            for lamp in self.LAMPS_LIST:
-                lamp_count = max(1, math.ceil(required_lumen / lamp['lumen']))
-                total_watt = lamp['watt'] * lamp_count
-                efficiency = lamp['lumen'] / lamp['watt']
-
-                if total_area < 10 and lamp['diameter'] < 600:
-                    is_suitable = True
-                elif room_height > 3.5 and lamp['lumen'] > 3000:
-                    is_suitable = True
-                else:
-                    is_suitable = True
-
-                if is_suitable and (total_watt < min_total_watt or efficiency > best_choice.get('efficiency', 0)):
-                    best_choice = lamp.copy()
-                    best_choice['efficiency'] = efficiency
-                    best_lamps_count = lamp_count
-                    min_total_watt = total_watt
-
-            if best_choice:
-                response_data = {
-                    "room_length": room_length,
-                    "room_width": room_width,
-                    "room_height": room_height,
-                    "illumination": illumination,
-                    "reserve_factor": reserve_factor,
-                    "tavsiya_qilinadi": {
-                        "lamp": best_choice["name"],
-                        "watt": best_choice["watt"],
-                        "lumen": best_choice["lumen"],
-                        "diameter": best_choice["diameter"],
-                        "weight": best_choice["weight"],
-                        "samaradorlik": round(best_choice['efficiency'], 2),
-                        "yoruglik": best_choice["lumen"] * best_lamps_count,
-                        "number_of_lamps": best_lamps_count,
-                    }
-                }
-                return Response(response_data, status=status.HTTP_200_OK)
-            else:
-                return Response({"status": "error", "message": "Mos lampa topilmadi."}, status=status.HTTP_400_BAD_REQUEST)
-
-        except Exception as e:
-            return Response({"status": "error", "message": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        data = request.data
+        room_length = float(data.get('room_length', 0))
+        room_width = float(data.get('room_width', 0))
+        room_height = float(data.get('room_height', 0))
+        illumination = float(data.get('illumination', 300))
+        
+        # 1. Xona yuzasi
+        S = room_length * room_width
+        
+        # 2. Yorug'lik oqimi
+        light_flux = illumination * S
+        
+        # 3. Xona balandligi koeffitsiyenti
+        if 3 <= room_height < 4:
+            height_coef = 1.2
+        elif 4 <= room_height < 6:
+            height_coef = 1.6
+        else:
+            height_coef = 1.8
+        
+        # 4. To'liq kerakli yorug'lik oqimi
+        total_lx = light_flux * height_coef
+        
+        # 5. Xonaga kerak bo'ladigan lampochka sonini aniqlash
+        i = (room_length * room_width) / (room_height * (room_length + room_width))
+        
+        if i < 1:
+            lamp_count = 4
+        elif 1 <= i < 2:
+            lamp_count = 9
+        elif 2 <= i < 3:
+            lamp_count = 16
+        else:
+            lamp_count = 25
+        
+        # 6. Eng mos keladigan lampochkani tanlash
+        best_choice = min(self.LAMPS_LIST, key=lambda lamp: abs((lamp['lumen'] * lamp_count) - total_lx))
+        
+        response_data = {
+            "room_length": room_length,
+            "room_width": room_width,
+            "room_height": room_height,
+            "illumination": illumination,
+            "tavsiya_qilinadi": {
+                "lamp": best_choice["name"],
+                "watt": best_choice["watt"],
+                "lumen": best_choice["lumen"],
+                "diameter": best_choice["diameter"],
+                "weight": best_choice["weight"],
+                "number_of_lamps": lamp_count,
+            }
+        }
+        return Response(response_data)
