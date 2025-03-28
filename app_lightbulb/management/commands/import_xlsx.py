@@ -56,7 +56,7 @@ class Command(BaseCommand):
                     table_height=safe_float(row.get('table_height')),
                     lk=safe_int(row.get('lk')),
                     ra=safe_int(row.get('ra')),
-                    k=safe_int(row.get('k')),
+                    k=safe_int(row.get('k')),    
                     ugr=safe_str(row.get('ugr')),
                     recommended_lamps=safe_str(row.get('recommended_lamps'))
                 )
