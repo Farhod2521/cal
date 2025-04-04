@@ -244,7 +244,7 @@ class LampCalculationAPIView(APIView):
         if i < 1:
             lamp_count = 4
         elif 1 <= i < 2:
-            lamp_count = 9
+            lamp_count = 8
         elif 2 <= i < 3:
             lamp_count = 16
         else:
