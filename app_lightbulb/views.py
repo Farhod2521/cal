@@ -269,3 +269,39 @@ class LampCalculationAPIView(APIView):
             }
         }
         return Response(response_data)
+
+
+
+
+class RoomCalculationAPIView(APIView):
+    def post(self, request, *args, **kwargs):
+        try:
+            width = float(request.data.get('weidth'))  # xona eni
+            height = float(request.data.get('heiht'))  # xona bo'yi
+            lk_id = int(request.data.get('lk_id'))     # Room_Type ID
+
+            # Xona yuzasi
+            area = width * height
+
+            # Room_Type ni topamiz
+            room = get_object_or_404(Room_Type, id=lk_id)
+
+            # Umumiy LK va quvvat hisoblash
+            energy = 90  # doimiy qiymat
+            umumiy_lk = area * room.lk
+            quvvat = umumiy_lk / energy
+
+            return Response({
+                "quvvat": round(quvvat, 2),
+                "Xona_nomi": room.name,
+                "Luks": room.lk,
+                "rang_uzatish_index": room.ra,
+                "pulsatsiya": room.k,
+                "UGR": room.ugr,
+                "Tavsiya etilgan lampalar": room.recommended_lamps,
+            })
+
+        except (TypeError, ValueError):
+            return Response({"error": "Ma'lumotlar noto‘g‘ri formatda berilgan."}, status=status.HTTP_400_BAD_REQUEST)
+        except Room_Type.DoesNotExist:
+            return Response({"error": "Room_Type topilmadi."}, status=status.HTTP_404_NOT_FOUND)
