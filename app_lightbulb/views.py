@@ -277,11 +277,12 @@ class RoomCalculationAPIView(APIView):
     def post(self, request, *args, **kwargs):
         try:
             width = float(request.data.get('weidth'))  # xona eni
+            length = float(request.data.get('length'))  # xona bo'yi
             height = float(request.data.get('heiht'))  # xona bo'yi
             lk_id = int(request.data.get('lk_id'))     # Room_Type ID
 
             # Xona yuzasi
-            area = width * height
+            area = width * length
 
             # Room_Type ni topamiz
             room = get_object_or_404(Room_Type, id=lk_id)
@@ -299,6 +300,9 @@ class RoomCalculationAPIView(APIView):
                 "pulsatsiya": room.k,
                 "UGR": room.ugr,
                 "Tavsiya etilgan lampalar": room.recommended_lamps,
+                "eni":width,
+                "boyi":length,
+                "balandlik":height,
             })
 
         except (TypeError, ValueError):
