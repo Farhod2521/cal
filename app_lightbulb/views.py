@@ -280,6 +280,7 @@ class RoomCalculationAPIView(APIView):
             length = float(request.data.get('length'))  # xona bo'yi
             height = float(request.data.get('heiht'))  # xona bo'yi
             lk_id = int(request.data.get('lk_id'))     # Room_Type ID
+            luks = int(request.data.get('luks'))   
 
             # Xona yuzasi
             area = width * length
@@ -289,13 +290,14 @@ class RoomCalculationAPIView(APIView):
 
             # Umumiy LK va quvvat hisoblash
             energy = 90  # doimiy qiymat
-            umumiy_lk = area * room.lk
+            umumiy_lk = area * luks
             quvvat = umumiy_lk / energy
 
             return Response({
                 "quvvat": round(quvvat, 2),
+                "umumiy_lk" : umumiy_lk,
                 "Xona_nomi": room.name,
-                "Luks": room.lk,
+                "Luks": luks,
                 "rang_uzatish_index": room.ra,
                 "pulsatsiya": room.k,
                 "UGR": room.ugr,
