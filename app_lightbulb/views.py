@@ -276,9 +276,9 @@ class LampCalculationAPIView(APIView):
 class RoomCalculationAPIView(APIView):
     def post(self, request, *args, **kwargs):
         try:
-            width = float(request.data.get('weidth'))  # xona eni
+            width = float(request.data.get('width'))  # xona eni
             length = float(request.data.get('length'))  # xona bo'yi
-            height = float(request.data.get('heiht'))  # xona bo'yi
+            height = float(request.data.get('height'))  # xona bo'yi
             lk_id = int(request.data.get('lk_id'))     # Room_Type ID
             luks = int(request.data.get('luks'))   
 
