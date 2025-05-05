@@ -42,7 +42,7 @@ class LEDPanel(models.Model):
     color_temperature = models.CharField(max_length=50)
     voltage = models.CharField(max_length=50)
     current = models.CharField(max_length=50)
-    protection_rating = models.CharField(max_length=20)
+    protection_rating = models.CharField(max_length=20, blank=True, null=True)
     frequency = models.CharField(max_length=20)
     luminous_flux_min = models.PositiveIntegerField(help_text="Kamida yorug'lik oqimi (Lm)")
     luminous_flux = models.CharField(max_length=50, help_text="Yorug'lik oqimi oralig'i")
