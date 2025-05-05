@@ -50,6 +50,7 @@ class LEDPanel(models.Model):
     color_rendering_index = models.CharField(max_length=50, blank=True, null=True)
     dimensions = models.CharField(max_length=100)
     mounting_size = models.CharField(max_length=100, blank=True, null=True)
+    image =  models.ImageField(upload_to="LED_Lamp/", blank=True, null=True)
     beam_angle = models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
