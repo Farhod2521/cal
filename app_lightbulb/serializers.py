@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Type_of_premises, Room_Type_Category, Room_Type
+from .models import Type_of_premises, Room_Type_Category, Room_Type, LEDPanel
 
 
 class Type_of_premises_Serializers(serializers.ModelSerializer):
@@ -35,3 +35,9 @@ class CalculateLampsSerializer(serializers.Serializer):
     working_surface_height = serializers.FloatField(required=False, default=0)
     reserve_factor = serializers.FloatField(default=1.4)
     lamp_flux = serializers.FloatField(default=4000)
+
+
+class LEDPanelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LEDPanel
+        fields = '__all__'

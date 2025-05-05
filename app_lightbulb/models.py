@@ -36,4 +36,21 @@ class Room_Type(models.Model):
     recommended_lamps = models.CharField(max_length=200)
 
 
+class LEDPanel(models.Model):
+    name = models.CharField(max_length=255)
+    power = models.PositiveIntegerField(help_text="Quvvat (Wattlarda)")
+    color_temperature = models.CharField(max_length=50)
+    voltage = models.CharField(max_length=50)
+    current = models.CharField(max_length=50)
+    protection_rating = models.CharField(max_length=20)
+    frequency = models.CharField(max_length=20)
+    luminous_flux_min = models.PositiveIntegerField(help_text="Kamida yorug'lik oqimi (Lm)")
+    luminous_flux = models.CharField(max_length=50, help_text="Yorug'lik oqimi oralig'i")
+    efficiency = models.CharField(max_length=50, help_text="Lümen/Watt samaradorlik")
+    color_rendering_index = models.CharField(max_length=50, blank=True, null=True)
+    dimensions = models.CharField(max_length=100)
+    mounting_size = models.CharField(max_length=100, blank=True, null=True)
+    beam_angle = models.CharField(max_length=100, blank=True, null=True)
 
+    def __str__(self):
+        return self.name

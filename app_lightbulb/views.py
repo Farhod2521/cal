@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from  rest_framework.generics import ListAPIView
-from .serializers import Type_of_premises_Serializers, RoomTypeCategorySerializer, RoomTypeSerializer
-from .models import Type_of_premises, Room_Type_Category, Room_Type
+from .serializers import Type_of_premises_Serializers, RoomTypeCategorySerializer, RoomTypeSerializer, LEDPanelSerializer
+from .models import Type_of_premises, Room_Type_Category, Room_Type, LEDPanel
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -311,3 +311,8 @@ class RoomCalculationAPIView(APIView):
             return Response({"error": "Ma'lumotlar noto‘g‘ri formatda berilgan."}, status=status.HTTP_400_BAD_REQUEST)
         except Room_Type.DoesNotExist:
             return Response({"error": "Room_Type topilmadi."}, status=status.HTTP_404_NOT_FOUND)
+        
+
+class LEDPanelListAPIView(ListAPIView):
+    queryset = LEDPanel.objects.all()
+    serializer_class = LEDPanelSerializer
