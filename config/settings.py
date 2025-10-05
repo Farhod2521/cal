@@ -64,9 +64,14 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'config.urls'
-CORS_ALLOW_ALL_ORIGINS = True
-
-
+CORS_ALLOW_ALL_ORIGINS = False
+CORS_ALLOWED_ORIGINS = [
+    "https://light-calc-rust.vercel.app",
+    "https://tmsiti-calc.vercel.app",   # shu joyni qo‘shishing kerak!
+    "http://localhost:3000",
+    "http://127.0.0.1:5500",
+    "http://127.0.0.1:5501",
+]
 CSRF_TRUSTED_ORIGINS = [
     "https://light-calc-rust.vercel.app",
     "https://cal.mkinfo.uz",
@@ -78,7 +83,7 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [ # Sessiya asosida autentifikatsiya
         'rest_framework.authentication.BasicAuthentication',   # Basic autentifikatsiya
-    ],
+    ],  
 }
 
 
