@@ -87,6 +87,7 @@ CSRF_TRUSTED_ORIGINS = [
     "https://light-calc-rust.vercel.app",
     "https://cal.mkinfo.uz",
     "http://127.0.0.1:8000",
+    "https://tmsiti-calc.vercel.app/",
 ]
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
