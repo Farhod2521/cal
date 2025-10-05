@@ -3,211 +3,761 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Room Type Selection</title>
+    <title>H2X Engineering - Plumbing & HVAC Calculators</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --primary: #0066cc;
+            --primary-dark: #0052a3;
+            --secondary: #00a859;
+            --dark: #333;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --border: #e0e0e0;
+            --shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
         body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f4f4f4;
+            background-color: #f5f7fa;
+            color: var(--dark);
+            line-height: 1.6;
         }
-        .container {
-            max-width: 600px;
-            margin: auto;
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        
+        /* Header Styles */
+        header {
+            background-color: white;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
-        h2, h3 {
-            text-align: center;
-            color: #333;
-        }
-        label {
-            font-weight: bold;
-            display: block;
-            margin-top: 10px;
-        }
-        select, input {
-            width: 100%;
-            padding: 8px;
-            margin-top: 5px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        button {
-            background: #28a745;
+        
+        .top-bar {
+            background-color: var(--primary);
             color: white;
-            border: none;
-            padding: 10px;
-            width: 100%;
-            margin-top: 15px;
-            cursor: pointer;
-            border-radius: 4px;
+            padding: 8px 0;
+            font-size: 0.9rem;
         }
-        button:hover {
-            background: #218838;
+        
+        .top-bar-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: flex-end;
+            padding: 0 20px;
+        }
+        
+        .top-bar a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+        }
+        
+        .navbar {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .logo i {
+            margin-right: 10px;
+            font-size: 2rem;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 25px;
+            position: relative;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+        
+        .nav-links a i {
+            margin-left: 5px;
+            font-size: 0.8rem;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            align-items: center;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-outline {
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            background: transparent;
+            margin-right: 15px;
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            border: 2px solid var(--primary);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            border-color: var(--primary-dark);
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #0066cc 0%, #00a859 100%);
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+        }
+        
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .hero h1 {
+            font-size: 2.8rem;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        
+        .btn-light {
+            background-color: white;
+            color: var(--primary);
+            border: 2px solid white;
+        }
+        
+        .btn-light:hover {
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+        
+        /* Why Use Section */
+        .why-use {
+            padding: 80px 0;
+            background-color: white;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .section-header h2 {
+            font-size: 2.2rem;
+            color: var(--dark);
+            margin-bottom: 15px;
+        }
+        
+        .section-header p {
+            font-size: 1.1rem;
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+        
+        .feature-card {
+            background-color: var(--light);
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .feature-icon {
+            background-color: var(--primary);
+            color: white;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 1.8rem;
+        }
+        
+        .feature-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+        
+        .feature-card p {
+            color: var(--gray);
+        }
+        
+        /* Calculators Section */
+        .calculators {
+            padding: 80px 0;
+            background-color: #f5f7fa;
+        }
+        
+        .calculator-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+        }
+        
+        .calculator-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s;
+        }
+        
+        .calculator-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .calculator-header {
+            background-color: var(--primary);
+            color: white;
+            padding: 20px;
+        }
+        
+        .calculator-header h3 {
+            font-size: 1.4rem;
+            margin-bottom: 5px;
+        }
+        
+        .calculator-body {
+            padding: 25px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        .calculator-footer {
+            padding: 0 25px 25px;
+        }
+        
+        .btn-calculate {
+            background-color: var(--secondary);
+            color: white;
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .btn-calculate:hover {
+            background-color: #008e48;
+        }
+        
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e8f5e9;
+            border-radius: 4px;
+            text-align: center;
+            font-weight: 600;
+            display: none;
+        }
+        
+        .result.show {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 60px 0 30px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-column h4 {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: white;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+        
+        .footer-links a {
+            color: #bbb;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid #444;
+            color: #bbb;
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .features {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .footer-content {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                padding: 15px;
+            }
+            
+            .nav-links {
+                margin: 20px 0;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .nav-links li {
+                margin: 5px 10px;
+            }
+            
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+            }
+            
+            .features {
+                grid-template-columns: 1fr;
+            }
+            
+            .calculator-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="top-bar-content">
+            <a href="#">Connect</a>
+            <a href="#">Login</a>
+        </div>
+    </div>
 
-<div class="container">
-    <h2>Room Type Selection</h2>
+    <!-- Navigation -->
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <i class="fas fa-tint"></i>
+                <span>h2x</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#">Product <i class="fas fa-chevron-down"></i></a></li>
+                <li><a href="#">Solutions <i class="fas fa-chevron-down"></i></a></li>
+                <li><a href="#">Pricing</a></li>
+                <li><a href="#">Resources <i class="fas fa-chevron-down"></i></a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+            <div class="nav-buttons">
+                <a href="#" class="btn btn-outline">Demo</a>
+            </div>
+        </nav>
+    </header>
 
-    <label for="categorySelect">Bo‘limni tanlang:</label>
-    <select id="categorySelect"></select>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Free Online Plumbing & HVAC Calculators</h1>
+            <p>Design with confidence using h2x's free calculators for ductwork, pipework, heat loss, and more. Fast results with downloadable reports!</p>
+            <div class="hero-buttons">
+                <a href="#" class="btn btn-light">Start For Free</a>
+                <a href="#" class="btn btn-primary">Get A Demo</a>
+            </div>
+        </div>
+    </section>
 
-    <label for="subCategorySelect">Subkategoriya tanlang:</label>
-    <select id="subCategorySelect"></select>
+    <!-- Why Use Section -->
+    <section class="why-use">
+        <div class="container">
+            <div class="section-header">
+                <h2>Why Use Our Plumbing & HVAC Calculators?</h2>
+                <p>Engineers, installers, and designers across the world rely on accurate data to make decisions. Our calculators are built using industry-standard formulas and offer results you can trust.</p>
+            </div>
+            <div class="features">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-calculator"></i>
+                    </div>
+                    <h3>Industry Standard Formulas</h3>
+                    <p>Our calculators use established engineering formulas for accurate, reliable results.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3>Fast Calculations</h3>
+                    <p>Get instant results without manual calculations or complex spreadsheets.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-download"></i>
+                    </div>
+                    <h3>Downloadable Reports</h3>
+                    <p>Export your calculation results for presentations, documentation, or client meetings.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    <div id="miniCategoryContainer"></div>
-    <div id="microCategoryContainer"></div> 
+    <!-- Calculators Section -->
+    <section class="calculators">
+        <div class="container">
+            <div class="section-header">
+                <h2>Choose a Calculator</h2>
+                <p>Select from our range of specialized calculators for plumbing and HVAC system design.</p>
+            </div>
+            <div class="calculator-grid">
+                <!-- Pressure Drop Calculator -->
+                <div class="calculator-card">
+                    <div class="calculator-header">
+                        <h3>Pressure Drop Calculator</h3>
+                        <p>Estimate pressure loss in pipes for accurate pump and system design.</p>
+                    </div>
+                    <div class="calculator-body">
+                        <div class="form-group">
+                            <label for="pipeLength">Pipe Length (m)</label>
+                            <input type="number" id="pipeLength" placeholder="Enter pipe length">
+                        </div>
+                        <div class="form-group">
+                            <label for="pipeDiameter">Pipe Diameter (mm)</label>
+                            <input type="number" id="pipeDiameter" placeholder="Enter pipe diameter">
+                        </div>
+                        <div class="form-group">
+                            <label for="flowRate">Flow Rate (L/s)</label>
+                            <input type="number" id="flowRate" placeholder="Enter flow rate">
+                        </div>
+                    </div>
+                    <div class="calculator-footer">
+                        <button class="btn-calculate" id="calculatePressureDrop">Calculate Pressure Drop</button>
+                        <div class="result" id="pressureDropResult"></div>
+                    </div>
+                </div>
 
-    <h3>Yangi Room Type qo‘shish</h3>
-    <form id="roomForm">
-        <label for="roomName">Nomi:</label>
-        <input type="text" id="roomName" required>
+                <!-- R-Value Calculator -->
+                <div class="calculator-card">
+                    <div class="calculator-header">
+                        <h3>R-Value Calculator</h3>
+                        <p>Calculate total thermal resistance for a range of materials and thicknesses.</p>
+                    </div>
+                    <div class="calculator-body">
+                        <div class="form-group">
+                            <label for="material">Material Type</label>
+                            <select id="material">
+                                <option value="">Select material</option>
+                                <option value="fiberglass">Fiberglass</option>
+                                <option value="cellulose">Cellulose</option>
+                                <option value="foam">Spray Foam</option>
+                                <option value="mineral">Mineral Wool</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="thickness">Thickness (mm)</label>
+                            <input type="number" id="thickness" placeholder="Enter thickness">
+                        </div>
+                        <div class="form-group">
+                            <label for="area">Area (m²)</label>
+                            <input type="number" id="area" placeholder="Enter area">
+                        </div>
+                    </div>
+                    <div class="calculator-footer">
+                        <button class="btn-calculate" id="calculateRValue">Calculate R-Value</button>
+                        <div class="result" id="rValueResult"></div>
+                    </div>
+                </div>
 
-        <label for="lk">LK:</label>
-        <input type="number" id="lk" required>
+                <!-- Duct Size Calculator -->
+                <div class="calculator-card">
+                    <div class="calculator-header">
+                        <h3>Duct Size Calculator</h3>
+                        <p>Work out the ideal duct dimensions based on airflow, velocity, and system requirements.</p>
+                    </div>
+                    <div class="calculator-body">
+                        <div class="form-group">
+                            <label for="airflow">Airflow (CFM)</label>
+                            <input type="number" id="airflow" placeholder="Enter airflow">
+                        </div>
+                        <div class="form-group">
+                            <label for="velocity">Air Velocity (m/s)</label>
+                            <input type="number" id="velocity" placeholder="Enter velocity">
+                        </div>
+                        <div class="form-group">
+                            <label for="ductType">Duct Type</label>
+                            <select id="ductType">
+                                <option value="">Select duct type</option>
+                                <option value="round">Round</option>
+                                <option value="rectangular">Rectangular</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="calculator-footer">
+                        <button class="btn-calculate" id="calculateDuctSize">Calculate Duct Size</button>
+                        <div class="result" id="ductSizeResult"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-        <label for="ra">RA:</label>
-        <input type="number" id="ra" required>
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h4>Product</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Features</a></li>
+                        <li><a href="#">Solutions</a></li>
+                        <li><a href="#">Pricing</a></li>
+                        <li><a href="#">Demo</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Resources</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Documentation</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Calculators</a></li>
+                        <li><a href="#">Support</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Company</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Contact</a></li>
+                        <li><a href="#">Partners</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Connect</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Twitter</a></li>
+                        <li><a href="#">LinkedIn</a></li>
+                        <li><a href="#">Facebook</a></li>
+                        <li><a href="#">YouTube</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 H2X Engineering. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
 
-        <label for="k">Pulsatsiya:</label>
-        <input type="number" id="k">
-
-        <label for="table_height">Ish stoli balandligi:</label>
-        <input type="number" id="table_height">
-
-        <label for="razreyd">Rang harorati:</label>
-        <input type="text" id="razreyd">
-
-        <label for="ugr">Yoritish turi:</label>
-        <input type="text" id="ugr">
-
-        <label for="recommended_lamps">Tavsiya etilgan lampalar:</label>
-        <input type="text" id="recommended_lamps">
-
-        <button type="submit">Qo‘shish</button>
-    </form>
-</div>
-
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
-        const categorySelect = document.getElementById("categorySelect");
-        const subCategorySelect = document.getElementById("subCategorySelect");
-        const miniCategoryContainer = document.getElementById("miniCategoryContainer");
-        const microCategoryContainer = document.getElementById("microCategoryContainer");
-        const roomForm = document.getElementById("roomForm");
-
-        const apiBaseURL = "https://cal.mkinfo.uz/api/v1/lightbulb/api/room-categories/";
-
-        async function fetchData(url) {
-            try {
-                const response = await fetch(url);
-                if (!response.ok) throw new Error(`Xatolik: ${response.statusText}`);
-                return await response.json();
-            } catch (error) {
-                console.error("Ma'lumot yuklashda xatolik:", error);
+    <script>
+        // Pressure Drop Calculator
+        document.getElementById('calculatePressureDrop').addEventListener('click', function() {
+            const length = parseFloat(document.getElementById('pipeLength').value);
+            const diameter = parseFloat(document.getElementById('pipeDiameter').value);
+            const flowRate = parseFloat(document.getElementById('flowRate').value);
+            
+            if (isNaN(length) || isNaN(diameter) || isNaN(flowRate)) {
+                alert('Please enter valid numbers for all fields');
+                return;
             }
-        }
-
-        async function loadDropdown(selectElement, url, defaultOption) {
-            const data = await fetchData(url);
-            if (data) {
-                selectElement.innerHTML = `<option value="">${defaultOption}</option>`;
-                data.forEach(item => {
-                    selectElement.innerHTML += `<option value="${item.id}">${item.name}</option>`;
-                });
-            }
-        }
-
-        function loadCategories() {
-            loadDropdown(categorySelect, apiBaseURL, "Bo‘limni tanlang");
-        }
-
-        async function loadSubcategories(categoryId) {
-            if (!categoryId) return;
-            const data = await fetchData(`${apiBaseURL}${categoryId}/`);
-            if (data) {
-                subCategorySelect.innerHTML = '<option value="">Subkategoriya tanlang</option>';
-                data.subcategories.forEach(sub => {
-                    subCategorySelect.innerHTML += `<option value="${sub.id}">${sub.name}</option>`;
-                });
-                miniCategoryContainer.innerHTML = "";
-                microCategoryContainer.innerHTML = "";
-            }
-        }
-
-        async function loadDynamicCategories(parentId, container, selectId, labelText) {
-            if (!parentId) return;
-            const data = await fetchData(`${apiBaseURL}${parentId}/`);
-            if (data && data.subcategories.length > 0) {
-                container.innerHTML = `
-                    <label for="${selectId}">${labelText}</label>
-                    <select id="${selectId}">
-                        <option value="">${labelText}</option>
-                        ${data.subcategories.map(sub => `<option value="${sub.id}">${sub.name}</option>`).join("")}
-                    </select>
-                `;
-            } else {
-                container.innerHTML = "";
-            }
-        }
-
-        categorySelect.addEventListener("change", e => loadSubcategories(e.target.value));
-        subCategorySelect.addEventListener("change", e => loadDynamicCategories(e.target.value, miniCategoryContainer, "miniCategorySelect", "Mini-kategoriya tanlang"));
-        miniCategoryContainer.addEventListener("change", e => {
-            if (e.target.id === "miniCategorySelect") {
-                loadDynamicCategories(e.target.value, microCategoryContainer, "microCategorySelect", "Mikro-kategoriya tanlang");
-            }
+            
+            // Simplified pressure drop calculation (Darcy-Weisbach approximation)
+            const diameterM = diameter / 1000;
+            const velocity = (flowRate / 1000) / (Math.PI * Math.pow(diameterM / 2, 2));
+            const frictionFactor = 0.02; // Assumed value for demonstration
+            const pressureDrop = frictionFactor * (length / diameterM) * (1000 * Math.pow(velocity, 2)) / 2;
+            
+            const resultElement = document.getElementById('pressureDropResult');
+            resultElement.textContent = `Pressure Drop: ${pressureDrop.toFixed(2)} kPa`;
+            resultElement.classList.add('show');
         });
-
-        async function submitRoom(event) {
-            event.preventDefault();
-
-            const category = categorySelect.value || null;
-            const subCategory = subCategorySelect.value || null;
-            const miniCategory = document.getElementById("miniCategorySelect") ? document.getElementById("miniCategorySelect").value : null;
-            const microCategory = document.getElementById("microCategorySelect") ? document.getElementById("microCategorySelect").value : null;
-
-            const data = {
-                category: category,
-                sub_category: subCategory,
-                mini_category: miniCategory,
-                micro_category: microCategory,
-                name: document.getElementById("roomName").value,
-                lk: document.getElementById("lk").value,
-                ra: document.getElementById("ra").value,
-                k: document.getElementById("k").value,
-                table_height: document.getElementById("table_height").value,
-                razreyd: document.getElementById("razreyd").value,
-                ugr: document.getElementById("ugr").value,
-                recommended_lamps: document.getElementById("recommended_lamps").value
-            };
-
-            try {
-                const response = await fetch(apiBaseURL, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(data)
-                });
-
-                if (!response.ok) throw new Error("Ma'lumot yuborishda xatolik!");
-
-                alert("Room Type added!");
-                roomForm.reset();
-            } catch (error) {
-                console.error(error);
-                alert("Xatolik yuz berdi!");
+        
+        // R-Value Calculator
+        document.getElementById('calculateRValue').addEventListener('click', function() {
+            const material = document.getElementById('material').value;
+            const thickness = parseFloat(document.getElementById('thickness').value);
+            const area = parseFloat(document.getElementById('area').value);
+            
+            if (!material || isNaN(thickness) || isNaN(area)) {
+                alert('Please complete all fields');
+                return;
             }
-        }
-
-        roomForm.addEventListener("submit", submitRoom);
-        loadCategories();
-    });
-</script>
-
+            
+            // Material R-values per mm (simplified for demonstration)
+            const rValues = {
+                'fiberglass': 0.04,
+                'cellulose': 0.035,
+                'foam': 0.06,
+                'mineral': 0.037
+            };
+            
+            const rValue = rValues[material] * thickness;
+            const totalRValue = rValue * area;
+            
+            const resultElement = document.getElementById('rValueResult');
+            resultElement.textContent = `R-Value: ${rValue.toFixed(2)} (m²·K/W) | Total: ${totalRValue.toFixed(2)}`;
+            resultElement.classList.add('show');
+        });
+        
+        // Duct Size Calculator
+        document.getElementById('calculateDuctSize').addEventListener('click', function() {
+            const airflow = parseFloat(document.getElementById('airflow').value);
+            const velocity = parseFloat(document.getElementById('velocity').value);
+            const ductType = document.getElementById('ductType').value;
+            
+            if (isNaN(airflow) || isNaN(velocity) || !ductType) {
+                alert('Please complete all fields');
+                return;
+            }
+            
+            // Convert CFM to m³/s
+            const airflowM3 = airflow * 0.000471947;
+            // Calculate area
+            const area = airflowM3 / velocity;
+            
+            let resultText;
+            if (ductType === 'round') {
+                const diameter = Math.sqrt(4 * area / Math.PI) * 1000; // Convert to mm
+                resultText = `Required Diameter: ${diameter.toFixed(0)} mm`;
+            } else {
+                // For rectangular ducts, assume a 1:2 aspect ratio
+                const height = Math.sqrt(area / 2) * 1000;
+                const width = height * 2;
+                resultText = `Required Size: ${width.toFixed(0)} mm × ${height.toFixed(0)} mm`;
+            }
+            
+            const resultElement = document.getElementById('ductSizeResult');
+            resultElement.textContent = resultText;
+            resultElement.classList.add('show');
+        });
+    </script>
 </body>
 </html>

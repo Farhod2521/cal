@@ -66,7 +66,7 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'config.urls'
 CORS_ALLOW_ALL_ORIGINS = True
 # yoki agar maxsus domenlar bilan cheklamoqchi bo'lsangiz
-CORS_ALLOW_ALL_ORIGINS = False
+CORS_ALLOW_ALL_ORIGINS = True
 CORS_ORIGIN_WHITELIST = [
     "https://light-calc-rust.vercel.app",
     "http://localhost:3000",
