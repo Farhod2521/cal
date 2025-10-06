@@ -38,6 +38,24 @@ class CalculateLampsSerializer(serializers.Serializer):
 
 
 class LEDPanelSerializer(serializers.ModelSerializer):
+    luminous_flux_min = serializers.SerializerMethodField()
+    luminous_flux_max = serializers.SerializerMethodField()
+
     class Meta:
         model = LEDPanel
         fields = '__all__'
+
+    def get_luminous_flux_min(self, obj):
+        try:
+            # Masalan: "240-300 Lm"
+            return int(obj.luminous_flux.split('-')[0].strip().replace(" Lm", ""))
+        except:
+            return None
+
+    def get_luminous_flux_max(self, obj):
+        try:
+            # Masalan: "240-300 Lm"
+            right = obj.luminous_flux.split('-')[1]
+            return int(right.strip().replace(" Lm", ""))
+        except:
+            return None

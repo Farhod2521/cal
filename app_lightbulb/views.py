@@ -314,5 +314,7 @@ class RoomCalculationAPIView(APIView):
         
 
 class LEDPanelListAPIView(ListAPIView):
-    queryset = LEDPanel.objects.all()
     serializer_class = LEDPanelSerializer
+
+    def get_queryset(self):
+        return LEDPanel.objects.all().order_by('-power')  
