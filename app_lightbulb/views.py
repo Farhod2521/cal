@@ -313,7 +313,7 @@ class RoomCalculationAPIView(APIView):
             return Response({"error": "Room_Type topilmadi."}, status=status.HTTP_404_NOT_FOUND)
         
 
-class LEDPanelListAPIView1(ListAPIView):
+class LEDPanelListAPIView(ListAPIView):
     serializer_class = LEDPanelSerializer
 
     def get_queryset(self):
