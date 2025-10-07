@@ -49,6 +49,7 @@ INSTALLED_APPS = [
 
     ################# APP #################################
     "app_lightbulb",
+    "app_green_build"
 ]
 
 MIDDLEWARE = [
@@ -172,3 +173,7 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+
+
