@@ -1,0 +1,294 @@
+{
+  "regions": [
+    {
+      "name": "Qoraqalpog'iston Respublikasi",
+      "districts": [
+        {
+          "name": "Qoraqalpog",
+          "average_temperature": -2.4,
+          "time": 174
+        },
+        {
+          "name": "Moynoq",
+          "average_temperature": -1.2,
+          "time": 167
+        },
+        {
+          "name": "Nukus",
+          "average_temperature": -0.6,
+          "time": 143
+        },
+        {
+          "name": "Chimboy",
+          "average_temperature": -1.3,
+          "time": 163
+        }
+      ]
+    },
+    {
+      "name": "Andijon viloyati",
+      "districts": [
+        {
+          "name": "Andijon",
+          "average_temperature": 1.6,
+          "time": 130
+        },
+        {
+          "name": "Xonabod",
+          "average_temperature": 1.1,
+          "time": 140
+        }
+      ]
+    },
+    {
+      "name": "Buxoro viloyati",
+      "districts": [
+        {
+          "name": "Buxoro",
+          "average_temperature": 3.1,
+          "time": 126
+        },
+        {
+          "name": "G'ijduvon",
+          "average_temperature": 2.9,
+          "time": 127
+        },
+        {
+          "name": "Qoraqo'l",
+          "average_temperature": 3.2,
+          "time": 122
+        }
+      ]
+    },
+    {
+      "name": "Jizzax viloyati",
+      "districts": [
+        {
+          "name": "Gallaorol",
+          "average_temperature": 1.4,
+          "time": 144
+        },
+        {
+          "name": "Jizzax",
+          "average_temperature": 2.7,
+          "time": 126
+        },
+        {
+          "name": "Do'stlik",
+          "average_temperature": 2.5,
+          "time": 126
+        }
+      ]
+    },
+    {
+      "name": "Qashqadaryo viloyati",
+      "districts": [
+        {
+          "name": "G'uzor",
+          "average_temperature": 4.7,
+          "time": 100
+        },
+        {
+          "name": "Qarshi",
+          "average_temperature": 3.7,
+          "time": 115
+        },
+        {
+          "name": "Minchuqur",
+          "average_temperature": 1.6,
+          "time": 187
+        },
+        {
+          "name": "Muborak",
+          "average_temperature": 3.5,
+          "time": 122
+        },
+        {
+          "name": "Shahrisabz",
+          "average_temperature": 4.1,
+          "time": 115
+        }
+      ]
+    },
+    {
+      "name": "Navoiy viloyati",
+      "districts": [
+        {
+          "name": "Zarafshon",
+          "average_temperature": 1.5,
+          "time": 136
+        },
+        {
+          "name": "Navoiy",
+          "average_temperature": 3.5,
+          "time": 123
+        },
+        {
+          "name": "Nurota",
+          "average_temperature": 2.8,
+          "time": 136
+        },
+        {
+          "name": "Uchquduq",
+          "average_temperature": 1.6,
+          "time": 144
+        }
+      ]
+    },
+    {
+      "name": "Namangan viloyati",
+      "districts": [
+        {
+          "name": "Kosonsoy",
+          "average_temperature": 2.0,
+          "time": 138
+        },
+        {
+          "name": "Namangan",
+          "average_temperature": 1.5,
+          "time": 128
+        },
+        {
+          "name": "Pop",
+          "average_temperature": 1.8,
+          "time": 125
+        }
+      ]
+    },
+    {
+      "name": "Samarqand viloyati",
+      "districts": [
+        {
+          "name": "Kattaqo'rg'on",
+          "average_temperature": 2.8,
+          "time": 134
+        },
+        {
+          "name": "Qo'shrabot",
+          "average_temperature": 1.9,
+          "time": 145
+        },
+        {
+          "name": "Samarqand",
+          "average_temperature": 3.3,
+          "time": 133
+        }
+      ]
+    },
+    {
+      "name": "Surxandaryo viloyati",
+      "districts": [
+        {
+          "name": "Denov",
+          "average_temperature": 5.1,
+          "time": 89
+        },
+        {
+          "name": "Termiz",
+          "average_temperature": 4.5,
+          "time": 91
+        },
+        {
+          "name": "Sherobod",
+          "average_temperature": 5.4,
+          "time": 80
+        }
+      ]
+    },
+    {
+      "name": "Sirdaryo viloyati",
+      "districts": [
+        {
+          "name": "Guliston",
+          "average_temperature": 1.8,
+          "time": 130
+        },
+        {
+          "name": "Sirdaryo",
+          "average_temperature": 1.8,
+          "time": 134
+        },
+        {
+          "name": "Yangiyer",
+          "average_temperature": 2.9,
+          "time": 121
+        }
+      ]
+    },
+    {
+      "name": "Toshkent viloyati",
+      "districts": [
+        {
+          "name": "Olmaliq",
+          "average_temperature": 3.2,
+          "time": 124
+        },
+        {
+          "name": "Ohangaron",
+          "average_temperature": 2.9,
+          "time": 135
+        },
+        {
+          "name": "Bekobod",
+          "average_temperature": 3.4,
+          "time": 112
+        },
+        {
+          "name": "Oygaying",
+          "average_temperature": -2.7,
+          "time": 236
+        },
+        {
+          "name": "Toshkent",
+          "average_temperature": 2.7,
+          "time": 129
+        },
+        {
+          "name": "Chorvoq",
+          "average_temperature": 1.7,
+          "time": 144
+        },
+        {
+          "name": "Chirchiq",
+          "average_temperature": 2.8,
+          "time": 130
+        }
+      ]
+    },
+    {
+      "name": "Farg'ona viloyati",
+      "districts": [
+        {
+          "name": "Qo'qon",
+          "average_temperature": 1.8,
+          "time": 131
+        },
+        {
+          "name": "Farg'onaviloyati",
+          "average_temperature": 1.9,
+          "time": 132
+        },
+        {
+          "name": "Shoximardon",
+          "average_temperature": 0.6,
+          "time": 160
+        }
+      ]
+    },
+    {
+      "name": "Xorazm viloyati",
+      "districts": [
+        {
+          "name": "Urganch",
+          "average_temperature": 0.8,
+          "time": 148
+        },
+        {
+          "name": "Xiva",
+          "average_temperature": 0.5,
+          "time": 143
+        }
+      ]
+    }
+  ]
+}
