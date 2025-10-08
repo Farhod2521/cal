@@ -31,7 +31,8 @@ urlpatterns = [
 
 
     ##################################  APP ###########################################
-    path("api/v1/lightbulb/", include("app_lightbulb.urls"))
+    path("api/v1/lightbulb/", include("app_lightbulb.urls")),
+    path("api/v1/heating/", include("app_heating_calc.urls")),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

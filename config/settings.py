@@ -49,7 +49,8 @@ INSTALLED_APPS = [
 
     ################# APP #################################
     "app_lightbulb",
-    "app_green_build"
+    "app_green_build",
+    "app_heating_calc"
 ]
 
 MIDDLEWARE = [
