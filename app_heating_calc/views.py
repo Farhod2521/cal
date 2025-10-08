@@ -17,16 +17,14 @@ class RegionDistrictAPIView(APIView):
                 region_name = region_data.get('name')
                 districts_data = region_data.get('districts', [])
                 
-                # Create or get region
                 region, created = Region.objects.get_or_create(name=region_name)
                 
-                # Create districts
                 for district_data in districts_data:
                     District.objects.create(
                         region=region,
                         name=district_data.get('name'),
-                        average_temperature=district_data.get('average_temperature'),
-                        time=district_data.get('time')
+                        average_temperature=float(district_data.get('average_temperature')),
+                        time=float(district_data.get('time'))
                     )
             
             return Response({
