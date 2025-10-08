@@ -8,7 +8,7 @@ class  Region(models.Model):
 
 
 
-class Distrik(models.Model):
+class District(models.Model):
     region =  models.ForeignKey(Region, on_delete=models.CASCADE)
     name  =  models.CharField(max_length=200)
     average_temperature = models.IntegerField()
