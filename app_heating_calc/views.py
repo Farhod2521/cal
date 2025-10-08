@@ -17,14 +17,14 @@ class RegionDistrictAPIView(APIView):
                 region_name = region_data.get('name')
                 districts_data = region_data.get('districts', [])
                 
-                region, created = Region.objects.get_or_create(name=region_name)
+                region, _ = Region.objects.get_or_create(name=region_name)
                 
                 for district_data in districts_data:
                     District.objects.create(
                         region=region,
                         name=district_data.get('name'),
-                        average_temperature=float(district_data.get('average_temperature')),
-                        time=float(district_data.get('time'))
+                        average_temperature=district_data.get('average_temperature'),
+                        time=district_data.get('time')
                     )
             
             return Response({
@@ -33,9 +33,7 @@ class RegionDistrictAPIView(APIView):
             }, status=status.HTTP_201_CREATED)
             
         except Exception as e:
-            return Response({
-                'error': f'Xatolik yuz berdi: {str(e)}'
-            }, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
     
     def get(self, request):
         """Get all regions with their districts"""
