@@ -367,7 +367,6 @@ Vazifa:
         )
         resp = client.responses.create(
             model="gpt-4o-mini",
-            reasoning={"effort": "low"},
             input=prompt,
         )
 
