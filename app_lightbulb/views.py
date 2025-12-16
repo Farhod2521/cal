@@ -322,7 +322,7 @@ class LEDPanelListAPIView(ListAPIView):
 
 
 from openai import OpenAI
-
+import os
 from .serializers import LightingAskSerializer
 
 class LightingChatAPIView(APIView):
@@ -362,8 +362,9 @@ Vazifa:
 4) Qisqa, aniq, o‘zbekcha yoz.
 """
 
-        client = OpenAI()  # OPENAI_API_KEY env dan olinadi :contentReference[oaicite:3]{index=3}
-
+        client = OpenAI(
+            api_key=os.getenv("OPENAI_API_KEY")
+        )
         resp = client.responses.create(
             model="gpt-5",
             reasoning={"effort": "low"},
