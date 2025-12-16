@@ -366,7 +366,7 @@ Vazifa:
             api_key=os.getenv("OPENAI_API_KEY")
         )
         resp = client.responses.create(
-            model="gpt-5",
+            model="gpt-4o-mini",
             reasoning={"effort": "low"},
             input=prompt,
         )
