@@ -318,3 +318,67 @@ class LEDPanelListAPIView(ListAPIView):
 
     def get_queryset(self):
         return LEDPanel.objects.all().order_by('-power')  
+    
+
+
+from openai import OpenAI
+
+from .serializers import LightingAskSerializer
+
+class LightingChatAPIView(APIView):
+
+
+    def post(self, request):
+        s = LightingAskSerializer(data=request.data)
+        s.is_valid(raise_exception=True)
+        d = s.validated_data
+
+        width = d["width"]
+        length = d["length"]
+        height = d["height"]
+        reflectance = d["reflectance"]
+        required_lux = d["required_lux"]
+        room_type = d.get("room_type", "turar joy xonasi")
+
+        area = width * length  # m^2
+
+        # Siz xohlasangiz, shu joyda o'zingiz UF/MF ni statik yoki dinamik berasiz
+        # (GPT dan ham so'rab tavsiya oldirsa bo'ladi)
+        base_lumens = required_lux * area
+
+        prompt = f"""
+Sen yoritish muhandisi kabi javob ber.
+Kiritilgan parametrlar:
+- Xona: {width}m x {length}m x {height}m (maydon: {area:.2f} m²)
+- Xona turi: {room_type}
+- Minimal yoritish: {required_lux} Lk
+- Rang qaytish koeffitsiyentlari (ship/devor/pol): {reflectance}
+
+
+Vazifa:
+1) Qanday LED lampochka (Watt va lumen) va nechta dona kerakligini tavsiya qil.
+2) 2-3 ta variant ber (masalan: 4x15W, 5x12W va h.k.).
+3) Har variant uchun taxminiy umumiy lumenni yoz.
+4) Qisqa, aniq, o‘zbekcha yoz.
+"""
+
+        client = OpenAI()  # OPENAI_API_KEY env dan olinadi :contentReference[oaicite:3]{index=3}
+
+        resp = client.responses.create(
+            model="gpt-5",
+            reasoning={"effort": "low"},
+            input=prompt,
+        )
+
+        return Response({
+            "inputs": {
+                "width": width,
+                "length": length,
+                "height": height,
+                "area_m2": round(area, 2),
+                "reflectance": reflectance,
+                "required_lux": required_lux,
+                "base_lumens_lux_x_area": round(base_lumens, 0),
+            },
+            "answer_text": resp.output_text,
+        })

@@ -59,3 +59,19 @@ class LEDPanelSerializer(serializers.ModelSerializer):
             return int(right.strip().replace(" Lm", ""))
         except:
             return None
+        
+
+
+class LightingAskSerializer(serializers.Serializer):
+    width = serializers.FloatField(min_value=0.1)   # m
+    length = serializers.FloatField(min_value=0.1)  # m
+    height = serializers.FloatField(min_value=0.1)  # m
+
+    # masalan: "70/50/20" (ship/devor/pol)
+    reflectance = serializers.CharField(max_length=50)
+
+    # masalan: 150 (lux)
+    required_lux = serializers.IntegerField(min_value=1)
+
+    # ixtiyoriy
+    room_type = serializers.CharField(max_length=100, required=False, allow_blank=True)
