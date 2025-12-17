@@ -72,15 +72,7 @@ MIDDLEWARE = [
 ]
 ROOT_URLCONF = 'config.urls'
 CORS_ALLOW_ALL_ORIGINS = True
-CORS_ALLOW_HEADERS = [
-    "content-type",
-    "authorization",
-]
-CORS_ALLOW_METHODS = [
-    "GET",
-    "POST",
-    "OPTIONS",
-]
+CORS_ALLOW_CREDENTIALS = True
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny',  # Barcha API'lar uchun autentifikatsiya kerak
