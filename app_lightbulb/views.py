@@ -325,14 +325,20 @@ from openai import OpenAI
 import os
 from .serializers import LightingAskSerializer
 
-class LightingChatAPIView(APIView):
+import os
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from openai import OpenAI
 
+
+class LightingChatAPIView(APIView):
 
     def post(self, request):
         s = LightingAskSerializer(data=request.data)
         s.is_valid(raise_exception=True)
         d = s.validated_data
 
+        # ===== INPUT =====
         width = d["width"]
         length = d["length"]
         height = d["height"]
@@ -340,45 +346,59 @@ class LightingChatAPIView(APIView):
         required_lux = d["required_lux"]
         room_type = d.get("room_type", "turar joy xonasi")
 
-        area = width * length  # m^2
+        area = width * length  # m²
 
-        # Siz xohlasangiz, shu joyda o'zingiz UF/MF ni statik yoki dinamik berasiz
-        # (GPT dan ham so'rab tavsiya oldirsa bo'ladi)
-        base_lumens = required_lux * area
-
+        # ===== FORMULA UCHUN TAYYOR MAʼLUMOT (GPT ICHIDA HISOBLAYDI) =====
         prompt = f"""
-Sen yoritish muhandisi kabi javob ber.
-Kiritilgan parametrlar:
-- Xona: {width}m x {length}m x {height}m (maydon: {area:.2f} m²)
+Sen professional yoritish muhandisisan.
+
+Quyidagi formulaga asoslanib hisobla (formulani javobda yozma):
+- Ishchi balandlik: Hm = h - 0.8
+- Umumiy lumen: Φ = (E × A) / (UF × MF)
+- MF = 0.8
+- UF taxminiy, rang va xona turiga qarab tanlanadi
+
+KIRITILGAN MAʼLUMOTLAR:
+- Xona o‘lchami: eni {width} m, uzunligi {length} m, balandligi {height} m
+- Xona maydoni: {area:.1f} m²
 - Xona turi: {room_type}
-- Minimal yoritish: {required_lux} Lk
+- Talab etiladigan yoritish: {required_lux} lux
 - Rang qaytish koeffitsiyentlari (ship/devor/pol): {reflectance}
 
+XONA TURIGA MOSLASH:
+- Agar turar joy bo‘lsa: qulay va yumshoq LED variant tanla
+- Agar shifoxona bo‘lsa: yorug‘lik bir tekis, ko‘zni charchatmaydigan, ishonchli variant tanla
+- Agar ofis yoki ish xonasi bo‘lsa: ish faoliyati uchun qulay variant tanla
 
-Vazifa:
-1) Qanday LED lampochka (Watt va lumen) va nechta dona kerakligini tavsiya qil.
-2) 2-3 ta variant ber (masalan: 4x15W, 5x12W va h.k.).
-3) Har variant uchun taxminiy umumiy lumenni yoz.
-4) Qisqa, aniq, o‘zbekcha yoz.
+JAVOB TALABI (JUDDA MUHIM):
+- Formulani yozma
+- Hisob-kitobni tushuntirma
+- Faqat yakuniy xulosa ber
+- 1–2 ta eng maqbul variant yetarli
+- O‘zbek tilida, qisqa va aniq yoz
+
+JAVOB NAMUNASI:
+"Ushbu xona uchun 3 dona 20W (≈2500 lm) LED lampochka o‘rnatish maqsadga muvofiq."
 """
 
-        client = OpenAI(
-            api_key=os.getenv("OPENAI_API_KEY")
-        )
+        client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
         resp = client.responses.create(
             model="gpt-4o-mini",
             input=prompt,
         )
 
-        return Response({
-            "inputs": {
-                "width": width,
-                "length": length,
-                "height": height,
-                "area_m2": round(area, 2),
-                "reflectance": reflectance,
-                "required_lux": required_lux,
-                "base_lumens_lux_x_area": round(base_lumens, 0),
-            },
-            "answer_text": resp.output_text,
-        })
+        return Response(
+            {
+                "inputs": {
+                    "width": width,
+                    "length": length,
+                    "height": height,
+                    "area_m2": round(area, 2),
+                    "room_type": room_type,
+                    "reflectance": reflectance,
+                    "required_lux": required_lux,
+                },
+                "recommendation": resp.output_text.strip(),
+            }
+        )
