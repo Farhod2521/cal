@@ -70,6 +70,10 @@ MIDDLEWARE = [
 ]
 ROOT_URLCONF = 'config.urls'
 CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_HEADERS = [
+    "content-type",
+    "authorization",
+]
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
