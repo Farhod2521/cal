@@ -48,7 +48,6 @@ INSTALLED_APPS = [
     ################## LIBRARY ############################
     'rest_framework', 
     'drf_yasg', 
-    "corsheaders",
     'mptt',
     'import_export',
 
@@ -61,7 +60,6 @@ CSRF_TRUSTED_ORIGINS = [
     "https://c.tmsiti.uz",
 ]
 MIDDLEWARE = [
-    "corsheaders.middleware.CorsMiddleware",  # 1-chi bo‘lishi kerak
     "django.middleware.common.CommonMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -71,8 +69,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 ROOT_URLCONF = 'config.urls'
-CORS_ALLOW_ALL_ORIGINS = True
-CORS_ALLOW_CREDENTIALS = True
+
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny',  # Barcha API'lar uchun autentifikatsiya kerak
