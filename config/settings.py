@@ -70,32 +70,7 @@ MIDDLEWARE = [
 ]
 ROOT_URLCONF = 'config.urls'
 CORS_ALLOW_ALL_ORIGINS = True
-CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOW_HEADERS = [
-    'accept',
-    'accept-encoding',
-    'authorization',
-    'content-type',
-    'dnt',
-    'origin',
-    'user-agent',
-    'x-csrftoken',
-    'x-requested-with',
-]
-CORS_ALLOW_METHODS = [
-    'DELETE',
-    'GET',
-    'OPTIONS',
-    'PATCH',
-    'POST',
-    'PUT',
-]
-CSRF_TRUSTED_ORIGINS = [
-    "https://light-calc-rust.vercel.app",
-    "https://cal.mkinfo.uz",
-    "http://127.0.0.1:8000",
-    "https://tmsiti-calc.vercel.app/",
-]
+
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny',  # Barcha API'lar uchun autentifikatsiya kerak
