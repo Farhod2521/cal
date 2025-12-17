@@ -321,32 +321,36 @@ class LEDPanelListAPIView(ListAPIView):
     
 
 
-from openai import OpenAI
-import os
+
 from .serializers import LightingAskSerializer
 
 import os
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from openai import OpenAI
+import traceback
+
 
 class LightingChatAPIView(APIView):
 
     def post(self, request):
-        s = LightingAskSerializer(data=request.data)
-        s.is_valid(raise_exception=True)
-        d = s.validated_data
+        try:
+            # 1️⃣ Serializer
+            s = LightingAskSerializer(data=request.data)
+            s.is_valid(raise_exception=True)
+            d = s.validated_data
 
-        width = d["width"]
-        length = d["length"]
-        height = d["height"]
-        reflectance = d["reflectance"]
-        required_lux = d["required_lux"]
-        room_type = d.get("room_type", "turar joy xonasi")
+            width = d["width"]
+            length = d["length"]
+            height = d["height"]
+            reflectance = d["reflectance"]
+            required_lux = d["required_lux"]
+            room_type = d.get("room_type", "turar joy xonasi")
 
-        area = width * length
+            area = width * length
 
-        prompt = f"""
+            # 2️⃣ Prompt
+            prompt = f"""
 SEN FAQAT NATIJA QAYTARASAN.
 
 QATʼIY QOIDALAR:
@@ -366,17 +370,54 @@ NAMUNA:
 "Ushbu xona uchun 3 dona 20W (≈2500 lm) LED lampochka o‘rnatish maqsadga muvofiq."
 """
 
-        client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+            # 3️⃣ API KEY tekshirish
+            api_key = os.getenv("OPENAI_API_KEY")
+            if not api_key:
+                return Response(
+                    {"error": "OPENAI_API_KEY topilmadi"},
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                )
 
-        resp = client.responses.create(
-            model="gpt-4o-mini",
-            input=prompt,
-            max_output_tokens=60
-        )
+            client = OpenAI(api_key=api_key)
 
-        text = resp.output_text.strip()
-        text = text.split(".")[0] + "."
+            # 4️⃣ OpenAI chaqiruvi
+            resp = client.responses.create(
+                model="gpt-4o-mini",
+                input=prompt,
+                max_output_tokens=60,
+            )
 
-        return Response({
-            "recommendation": text
-        })
+            # 5️⃣ XAVFSIZ TEXT OLISH
+            text = ""
+
+            if hasattr(resp, "output_text") and resp.output_text:
+                text = resp.output_text
+            elif hasattr(resp, "output") and resp.output:
+                text = resp.output[0].content[0].text
+            else:
+                return Response(
+                    {"error": "AI javobi bo‘sh qaytdi"},
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                )
+
+            text = text.strip()
+            if "." in text:
+                text = text.split(".")[0] + "."
+            else:
+                text += "."
+
+            # 6️⃣ OK javob
+            return Response(
+                {"recommendation": text},
+                status=status.HTTP_200_OK
+            )
+
+        except Exception as e:
+            # 🔥 LOG uchun
+            print("🔥 LIGHTING CHAT API ERROR:")
+            traceback.print_exc()
+
+            return Response(
+                {"error": str(e)},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
