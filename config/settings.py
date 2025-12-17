@@ -57,7 +57,9 @@ INSTALLED_APPS = [
     "app_green_build",
     "app_heating_calc"
 ]
-
+CSRF_TRUSTED_ORIGINS = [
+    "https://c.tmsiti.uz",
+]
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",  # 1-chi bo‘lishi kerak
     "django.middleware.common.CommonMiddleware",
