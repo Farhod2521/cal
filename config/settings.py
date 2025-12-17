@@ -74,7 +74,11 @@ CORS_ALLOW_HEADERS = [
     "content-type",
     "authorization",
 ]
-
+CORS_ALLOW_METHODS = [
+    "GET",
+    "POST",
+    "OPTIONS",
+]
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny',  # Barcha API'lar uchun autentifikatsiya kerak
