@@ -330,7 +330,6 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from openai import OpenAI
 
-
 class LightingChatAPIView(APIView):
 
     def post(self, request):
@@ -338,7 +337,6 @@ class LightingChatAPIView(APIView):
         s.is_valid(raise_exception=True)
         d = s.validated_data
 
-        # ===== INPUT =====
         width = d["width"]
         length = d["length"]
         height = d["height"]
@@ -346,38 +344,25 @@ class LightingChatAPIView(APIView):
         required_lux = d["required_lux"]
         room_type = d.get("room_type", "turar joy xonasi")
 
-        area = width * length  # m²
+        area = width * length
 
-        # ===== FORMULA UCHUN TAYYOR MAʼLUMOT (GPT ICHIDA HISOBLAYDI) =====
         prompt = f"""
-Sen professional yoritish muhandisisan.
+SEN FAQAT NATIJA QAYTARASAN.
 
-Quyidagi formulaga asoslanib hisobla (formulani javobda yozma):
-- Ishchi balandlik: Hm = h - 0.8
-- Umumiy lumen: Φ = (E × A) / (UF × MF)
-- MF = 0.8
-- UF taxminiy, rang va xona turiga qarab tanlanadi
+QATʼIY QOIDALAR:
+- FaqAT 1 ta jumla yoz
+- Formula, hisob, izoh yozma
+- Ro‘yxat va markdown yo‘q
+- Matn juda qisqa bo‘lsin
 
-KIRITILGAN MAʼLUMOTLAR:
-- Xona o‘lchami: eni {width} m, uzunligi {length} m, balandligi {height} m
-- Xona maydoni: {area:.1f} m²
+Maʼlumotlar:
+- Xona: {width}×{length}×{height} m
+- Maydon: {area:.1f} m²
 - Xona turi: {room_type}
-- Talab etiladigan yoritish: {required_lux} lux
-- Rang qaytish koeffitsiyentlari (ship/devor/pol): {reflectance}
+- Yoritish: {required_lux} lux
+- Ranglar: {reflectance}
 
-XONA TURIGA MOSLASH:
-- Agar turar joy bo‘lsa: qulay va yumshoq LED variant tanla
-- Agar shifoxona bo‘lsa: yorug‘lik bir tekis, ko‘zni charchatmaydigan, ishonchli variant tanla
-- Agar ofis yoki ish xonasi bo‘lsa: ish faoliyati uchun qulay variant tanla
-
-JAVOB TALABI (JUDDA MUHIM):
-- Formulani yozma
-- Hisob-kitobni tushuntirma
-- Faqat yakuniy xulosa ber
-- 1–2 ta eng maqbul variant yetarli
-- O‘zbek tilida, qisqa va aniq yoz
-
-JAVOB NAMUNASI:
+NAMUNA:
 "Ushbu xona uchun 3 dona 20W (≈2500 lm) LED lampochka o‘rnatish maqsadga muvofiq."
 """
 
@@ -386,19 +371,12 @@ JAVOB NAMUNASI:
         resp = client.responses.create(
             model="gpt-4o-mini",
             input=prompt,
+            max_output_tokens=60
         )
 
-        return Response(
-            {
-                "inputs": {
-                    "width": width,
-                    "length": length,
-                    "height": height,
-                    "area_m2": round(area, 2),
-                    "room_type": room_type,
-                    "reflectance": reflectance,
-                    "required_lux": required_lux,
-                },
-                "recommendation": resp.output_text.strip(),
-            }
-        )
+        text = resp.output_text.strip()
+        text = text.split(".")[0] + "."
+
+        return Response({
+            "recommendation": text
+        })
