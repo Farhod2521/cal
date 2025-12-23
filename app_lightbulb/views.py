@@ -446,12 +446,14 @@ SEN FAQAT TAYYOR TAVSIYA QAYTARASAN.
 
 QATʼIY QOIDALAR:
 - FaqAT 1 ta tavsiya yoz
-- "1." bilan boshlansin
-- Keyingi qatorda "Sababi:" bo‘lsin
-- Hisob formulasi yozma
-- Markdown, ro‘yxat, emoji YO‘Q
+- Matn "1." bilan boshlansin
+- Keyingi qatorda albatta "Sababi:" bo‘lsin
+- Hisob formulalari, belgilar yoki matematik ifodalar yozma
+- Markdown, ro‘yxatlar, emoji va ortiqcha belgilar YO‘Q
 - Texnik va rasmiy uslubda yoz
-- Matn 2–3 gapdan oshmasin
+- Umumiy matn 2–3 gapdan oshmasin
+- Tavsiya tom konstruksiyasi va material tanlashga oid bo‘lsin
+- Tavsiya berishda shamol va qor yuklari majburiy hisobga olinsin
 
 KIRISH MAʼLUMOTLARI:
 - Tom maydoni: {area} m²
@@ -461,8 +463,13 @@ KIRISH MAʼLUMOTLARI:
 - Qor yuki: {snow_load} kN/m²
 - Shamol yuki: {wind_load} kPa
 
-NAMUNA FORMAT:
-1. ...
+TALAB:
+- Agar shamol yuki yuqori bo‘lsa, mustahkamroq metall va profil tavsiya qil
+- Agar tom yassi bo‘lsa, shamol va suv taʼsiriga alohida urg‘u ber
+- Maydon katta bo‘lsa, umumiy yuk taʼsirini inobatga ol
+
+NAMUNA FORMAT (AYNAN SHU KO‘RINISHDA):
+1. Tom yopmasi sifatida ...
 Sababi: ...
 """
 
