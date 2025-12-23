@@ -448,29 +448,31 @@ QATʼIY QOIDALAR:
 - FaqAT 1 ta tavsiya yoz
 - Matn "1." bilan boshlansin
 - Keyingi qatorda albatta "Sababi:" bo‘lsin
-- Hisob formulalari, belgilar yoki matematik ifodalar yozma
+- Hisob formulalari, matematik belgilar va normativ havolalar yozma
 - Markdown, ro‘yxatlar, emoji va ortiqcha belgilar YO‘Q
-- Texnik va rasmiy uslubda yoz
+- Texnik va rasmiy, SNQ / SHNK hujjatlariga xos uslubda yoz
 - Umumiy matn 2–3 gapdan oshmasin
-- Tavsiya tom konstruksiyasi va material tanlashga oid bo‘lsin
-- Tavsiya berishda shamol va qor yuklari majburiy hisobga olinsin
+- Tavsiya faqat tom yopma metalli turini tanlashga oid bo‘lsin
+- Qor va shamol yuklari majburiy hisobga olinsin
 
 KIRISH MAʼLUMOTLARI:
 - Tom maydoni: {area} m²
 - Joylashuv: {location}
 - Tom turi: {roof_type}
-- Metall turi: {metal_type}
+- Amaldagi metall turi: {metal_type}
 - Qor yuki: {snow_load} kN/m²
 - Shamol yuki: {wind_load} kPa
 
 TALAB:
-- Agar shamol yuki yuqori bo‘lsa, mustahkamroq metall va profil tavsiya qil
-- Agar tom yassi bo‘lsa, shamol va suv taʼsiriga alohida urg‘u ber
-- Maydon katta bo‘lsa, umumiy yuk taʼsirini inobatga ol
+- Agar qor yuki shamol yukidan ustun bo‘lsa, yuk ko‘tarish qobiliyati yuqori bo‘lgan metallni tavsiya qil
+- Metallning qalinligi va profili yuk taʼsiriga mos tanlansin
+- Tavsiya konstruktiv barqarorlik va normativ talablarga mos bo‘lsin
+- Yassi tomlarda qor yig‘ilishi xavfiga alohida urg‘u ber
 
-NAMUNA FORMAT (AYNAN SHU KO‘RINISHDA):
-1. Tom yopmasi sifatida ...
-Sababi: ...
+NATIJANI AYNAN QUYIDAGI FORMATDA YOZ:
+1. Tom yopmasi sifatida amaldagi metall o‘rniga kamida 0.6 mm qalinlikdagi, yuqori yuk ko‘tarish qobiliyatiga ega profnastil yoki listli metall qo‘llash tavsiya etiladi.
+Sababi: Berilgan hududda qor yukining hisobiy qiymati yuqori bo‘lib, yassi tomlarda qor yig‘ilishi natijasida tom konstruksiyasiga taʼsir etuvchi umumiy yuk ortadi, qalin va mustahkam metall esa SNQ / SHNK talablari asosida deformatsiya xavfini kamaytiradi va tomning uzoq muddatli ekspluatatsiyasini taʼminlaydi.
+
 """
 
             # 3️⃣ API KEY tekshirish
