@@ -477,7 +477,7 @@ TANLASH MANTIQLARI:
 - Shamol yuki ustun bo‘lsa, shamol bosimiga chidamli va ko‘tarilib ketishga qarshi profilga ega material tavsiya qilinsin
 - Yassi tomlarda qor va shamol yig‘ilishiga alohida urg‘u berilsin
 - Maydon katta bo‘lsa, umumiy yuk oshgan deb baholansin
-- Material qalinligi va turi SNQ 2.03.10-24 talablariga muvofiq tanlansin (0.45 mm dan 0.8 mm gacha)
+- Material qalinligi va turi SHNQ 2.03.10-24 talablariga muvofiq tanlansin (0.45 mm dan 0.8 mm gacha)
 
 NATIJANI AYNAN QUYIDAGI FORMATDA YOZ:
 1. Tom yopmasi sifatida amaldagi material o‘rniga <tanlangan_material> va yuk sharoitlariga mos qalinlikdagi variantni qo‘llash tavsiya etiladi.
