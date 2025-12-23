@@ -445,14 +445,14 @@ class RoofChatAPIView(APIView):
 SEN FAQAT TAYYOR TAVSIYA QAYTARASAN.
 
 QATʼIY QOIDALAR:
-- FaqAT 1 ta tavsiya yoz
-- Matn "1." bilan boshlansin
+- Faqat 1 ta tavsiya yoz
+- Tavsiya matni "1." bilan boshlansin
 - Keyingi qatorda albatta "Sababi:" bo‘lsin
-- Hisob formulalari, raqamlar bilan amallar yoki belgilar yozma
-- Markdown, ro‘yxat, emoji va ortiqcha matn YO‘Q
-- Texnik va rasmiy, SNQ / SHNK hujjatlariga xos tilda yoz
+- Hisob formulalari, raqamlar bilan amallar yoki matematik belgilar yozma
+- Markdown, ro‘yxatlar, emoji va ortiqcha matn yo‘q
+- Texnik, rasmiy va SNQ 2.03.10-24 “Tomlar va tom qoplamalar” standarti talablari asosida yoz
 - Umumiy matn 2–3 gapdan oshmasin
-- Tavsiya faqat tom yopma materiali va uning qalinligini tanlashga oid bo‘lsin
+- Tavsiya faqat tom yopma materiali va uning qalinligini tanlashga qaratilsin
 - Qor va shamol yuklari majburiy hisobga olinsin
 
 FOYDALANILADIGAN TOM YOPMA MATERIALLARI:
@@ -472,16 +472,16 @@ KIRISH MAʼLUMOTLARI:
 - Qor yuki: {snow_load} kN/m²
 - Shamol yuki: {wind_load} kPa
 
-TANLASH MANTIQI (ICHKI QOIDA):
-- Qor yuki ustun bo‘lsa → yuk ko‘tarish qobiliyati yuqori va qalin material tanla
-- Shamol yuki ustun bo‘lsa → ko‘tarilib ketishga chidamli, og‘irroq yoki profilli material tanla
-- Yassi tomlarda → qor yig‘ilishi va shamol bosimi kuchayishini hisobga ol
-- Maydon katta bo‘lsa → umumiy yuk taʼsirini oshgan deb bahola
-- Material qalinligini hudud va yuklarga mos holda tanla (0.45–0.8 mm oralig‘ida)
+TANLASH MANTIQLARI:
+- Qor yuki shamol yukidan ustun bo‘lsa, yuk ko‘tarish qobiliyati yuqori, qalinligi va profiliga ko‘ra mos material tanla
+- Shamol yuki ustun bo‘lsa, shamol bosimiga chidamli va ko‘tarilib ketishga qarshi profilga ega material tavsiya qilinsin
+- Yassi tomlarda qor va shamol yig‘ilishiga alohida urg‘u berilsin
+- Maydon katta bo‘lsa, umumiy yuk oshgan deb baholansin
+- Material qalinligi va turi SNQ 2.03.10-24 talablariga muvofiq tanlansin (0.45 mm dan 0.8 mm gacha)
 
 NATIJANI AYNAN QUYIDAGI FORMATDA YOZ:
-1. Tom yopmasi sifatida amaldagi material o‘rniga <tanlangan_material> va yuk sharoitiga mos qalinlikdagi variantni qo‘llash tavsiya etiladi.
-Sababi: Berilgan hududning qor va shamol yuklari hamda tom turi hisobga olinganda, tanlangan material SNQ / SHNK talablariga muvofiq ravishda konstruksiyaga taʼsir etuvchi umumiy yukni barqaror qabul qiladi va tomning uzoq muddatli ekspluatatsiyasini taʼminlaydi.
+1. Tom yopmasi sifatida amaldagi material o‘rniga <tanlangan_material> va yuk sharoitlariga mos qalinlikdagi variantni qo‘llash tavsiya etiladi.
+Sababi: Berilgan hudud va yuk sharoitlari hamda tom turining xususiyatlari SNQ 2.03.10-24 standarti talablariga to‘liq javob beradigan konstruksiyani taʼminlaydi va tomning uzoq muddatli xizmat ko‘rsatishini kafolatlaydi.
 
 """
 
