@@ -75,3 +75,13 @@ class LightingAskSerializer(serializers.Serializer):
 
     # ixtiyoriy
     room_type = serializers.CharField(max_length=100, required=False, allow_blank=True)
+
+
+
+class RoofAskSerializer(serializers.Serializer):
+    area = serializers.FloatField()
+    location = serializers.CharField()
+    snow_load = serializers.FloatField()
+    wind_load = serializers.FloatField()
+    roof_type = serializers.CharField()
+    metal_type = serializers.CharField()

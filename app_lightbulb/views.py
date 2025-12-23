@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from  rest_framework.generics import ListAPIView
-from .serializers import Type_of_premises_Serializers, RoomTypeCategorySerializer, RoomTypeSerializer, LEDPanelSerializer
+from .serializers import Type_of_premises_Serializers, RoomTypeCategorySerializer, RoomTypeSerializer, LEDPanelSerializer, RoofAskSerializer
 from .models import Type_of_premises, Room_Type_Category, Room_Type, LEDPanel
 
 from rest_framework.views import APIView
@@ -415,6 +415,97 @@ NAMUNA:
         except Exception as e:
             # 🔥 LOG uchun
             print("🔥 LIGHTING CHAT API ERROR:")
+            traceback.print_exc()
+
+            return Response(
+                {"error": str(e)},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+
+
+class RoofChatAPIView(APIView):
+
+    def post(self, request):
+        try:
+            # 1️⃣ Serializer
+            s = RoofAskSerializer(data=request.data)
+            s.is_valid(raise_exception=True)
+            d = s.validated_data
+
+            area = d["area"]                     # m²
+            location = d["location"]             # Ohangaron tumani
+            snow_load = d["snow_load"]           # kN/m²
+            wind_load = d["wind_load"]           # kPa
+            roof_type = d["roof_type"]            # Yassi tom
+            metal_type = d["metal_type"]          # Metall cherepitsa
+
+            # 2️⃣ Prompt
+            prompt = f"""
+SEN FAQAT TAYYOR TAVSIYA QAYTARASAN.
+
+QATʼIY QOIDALAR:
+- FaqAT 1 ta tavsiya yoz
+- "1." bilan boshlansin
+- Keyingi qatorda "Sababi:" bo‘lsin
+- Hisob formulasi yozma
+- Markdown, ro‘yxat, emoji YO‘Q
+- Texnik va rasmiy uslubda yoz
+- Matn 2–3 gapdan oshmasin
+
+KIRISH MAʼLUMOTLARI:
+- Tom maydoni: {area} m²
+- Joylashuv: {location}
+- Tom turi: {roof_type}
+- Metall turi: {metal_type}
+- Qor yuki: {snow_load} kN/m²
+- Shamol yuki: {wind_load} kPa
+
+NAMUNA FORMAT:
+1. ...
+Sababi: ...
+"""
+
+            # 3️⃣ API KEY tekshirish
+            api_key = os.getenv("OPENAI_API_KEY")
+            if not api_key:
+                return Response(
+                    {"error": "OPENAI_API_KEY topilmadi"},
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                )
+
+            client = OpenAI(api_key=api_key)
+
+            # 4️⃣ OpenAI chaqiruvi
+            resp = client.responses.create(
+                model="gpt-4o-mini",
+                input=prompt,
+                max_output_tokens=200,
+            )
+
+            # 5️⃣ XAVFSIZ TEXT OLISH
+            text = ""
+
+            if hasattr(resp, "output_text") and resp.output_text:
+                text = resp.output_text
+            elif hasattr(resp, "output") and resp.output:
+                text = resp.output[0].content[0].text
+            else:
+                return Response(
+                    {"error": "AI javobi bo‘sh qaytdi"},
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                )
+
+            text = text.strip()
+
+            # 6️⃣ OK javob
+            return Response(
+                {"recommendation": text},
+                status=status.HTTP_200_OK
+            )
+
+        except Exception as e:
+            print("🔥 ROOF CHAT API ERROR:")
             traceback.print_exc()
 
             return Response(

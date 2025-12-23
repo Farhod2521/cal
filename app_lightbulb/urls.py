@@ -2,7 +2,8 @@ from django.urls import path
 from .views import (
     Type_of_premises_ListApiview, LampCalculationAPIView, RoomTypeCategoryListView, 
     RoomTypeListView, RoomTypeCategoryByParentView, RoomTypeCategoryAPIView, RoomCalculationAPIView, LEDPanelListAPIView, 
-    LightingChatAPIView)
+    LightingChatAPIView, RoofChatAPIView
+    )
 
 
 
@@ -23,4 +24,5 @@ urlpatterns = [
     path('calculate-aa/', RoomCalculationAPIView.as_view(), name='room_type_category_list'),
     path('led-panels/', LEDPanelListAPIView.as_view(), name='led-panel-list'),
     path("lighting/chat/", LightingChatAPIView.as_view(), name="lighting-chat"),
+    path("roof-ai/chat/", RoofChatAPIView.as_view(), name="lighting-chat"),
 ]
