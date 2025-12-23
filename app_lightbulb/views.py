@@ -450,7 +450,7 @@ QATʼIY QOIDALAR:
 - Keyingi qatorda albatta "Sababi:" bo‘lsin
 - Hisob formulalari, raqamlar bilan amallar yoki matematik belgilar yozma
 - Markdown, ro‘yxatlar, emoji va ortiqcha matn yo‘q
-- Texnik, rasmiy va SNQ 2.03.10-24 “Tomlar va tom qoplamalar” standarti talablari asosida yoz
+- Texnik, rasmiy va SHNQ 2.03.10-24 “Tomlar va tom qoplamalar” standarti talablari asosida yoz
 - Umumiy matn 2–3 gapdan oshmasin
 - Tavsiya faqat tom yopma materiali va uning qalinligini tanlashga qaratilsin
 - Qor va shamol yuklari majburiy hisobga olinsin
@@ -481,7 +481,7 @@ TANLASH MANTIQLARI:
 
 NATIJANI AYNAN QUYIDAGI FORMATDA YOZ:
 1. Tom yopmasi sifatida amaldagi material o‘rniga <tanlangan_material> va yuk sharoitlariga mos qalinlikdagi variantni qo‘llash tavsiya etiladi.
-Sababi: Berilgan hudud va yuk sharoitlari hamda tom turining xususiyatlari SNQ 2.03.10-24 standarti talablariga to‘liq javob beradigan konstruksiyani taʼminlaydi va tomning uzoq muddatli xizmat ko‘rsatishini kafolatlaydi.
+Sababi: Berilgan hudud va yuk sharoitlari hamda tom turining xususiyatlari SHNQ 2.03.10-24 standarti talablariga to‘liq javob beradigan konstruksiyani taʼminlaydi va tomning uzoq muddatli xizmat ko‘rsatishini kafolatlaydi.
 
 """
 
